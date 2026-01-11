@@ -55,9 +55,7 @@ export async function getAvailability(
 
   const response = await fetch(url.toString(), {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    // GETリクエストではContent-Typeヘッダーは不要
   })
 
   if (!response.ok) {
@@ -84,7 +82,8 @@ export async function createReservation(
   const response = await fetch(url.toString(), {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      // text/plainを使用してプリフライトリクエストを回避
+      'Content-Type': 'text/plain;charset=utf-8',
     },
     body: JSON.stringify(body),
   })

@@ -308,6 +308,7 @@ function doPost(e: GoogleAppsScript.Events.DoPost): GoogleAppsScript.Content.Tex
   }
 }
 
+
 function handleAvailability(
   e: GoogleAppsScript.Events.DoGet
 ): GoogleAppsScript.Content.TextOutput {
