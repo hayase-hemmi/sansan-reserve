@@ -1,0 +1,20 @@
+{
+  "name": "sansan-reserve-gas",
+  "version": "1.0.0",
+  "description": "Google Apps Script backend for Sansan Reserve",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "push": "npm run build && clasp push -f",
+    "deploy": "npm run push && clasp deploy",
+    "watch": "tsc --watch"
+  },
+  "keywords": ["google-apps-script", "calendar", "reservation"],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.83",
+    "typescript": "^5.3.3"
+  }
+}

@@ -31,30 +31,6 @@
             ></v-text-field>
           </v-col>
 
-          <!-- フリガナ（姓） -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="formData.lastNameKana"
-              :rules="[rules.required, rules.kana]"
-              label="フリガナ（セイ）"
-              placeholder="ヤマダ"
-              variant="outlined"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- フリガナ（名） -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="formData.firstNameKana"
-              :rules="[rules.required, rules.kana]"
-              label="フリガナ（メイ）"
-              placeholder="タロウ"
-              variant="outlined"
-              required
-            ></v-text-field>
-          </v-col>
-
           <!-- メールアドレス -->
           <v-col cols="12">
             <v-text-field
@@ -68,65 +44,24 @@
             ></v-text-field>
           </v-col>
 
-          <!-- 電話番号 -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="formData.phone"
-              :rules="[rules.required, rules.phone]"
-              label="電話番号"
-              placeholder="090-1234-5678"
-              variant="outlined"
-              type="tel"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- 撮影希望日 -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="formData.preferredDate"
-              :rules="[rules.required]"
-              label="撮影希望日"
-              variant="outlined"
-              type="date"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- 撮影プラン -->
+          <!-- 撮影メニュー -->
           <v-col cols="12">
             <v-select
-              v-model="formData.plan"
-              :items="planOptions"
+              v-model="formData.menu"
+              :items="menuOptions"
               :rules="[rules.required]"
-              label="撮影プラン"
+              label="撮影メニュー"
               variant="outlined"
               required
             ></v-select>
           </v-col>
 
-          <!-- 参加人数 -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model.number="formData.participants"
-              :rules="[rules.required, rules.number]"
-              label="参加人数"
-              variant="outlined"
-              type="number"
-              min="1"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- 備考 -->
+          <!-- 撮影日時選択 -->
           <v-col cols="12">
-            <v-textarea
-              v-model="formData.notes"
-              label="備考・ご要望"
-              placeholder="ご要望やご質問などございましたらご記入ください"
-              variant="outlined"
-              rows="4"
-            ></v-textarea>
+            <SlotPicker
+              v-model="formData.selectedSlot"
+              :menu="formData.menu"
+            />
           </v-col>
         </v-row>
       </v-form>
@@ -138,54 +73,68 @@
         color="grey"
         variant="outlined"
         @click="handleReset"
+        :disabled="submitting"
       >
         クリア
       </v-btn>
       <v-btn
         color="primary"
         variant="elevated"
-        :disabled="!valid"
+        :disabled="!valid || !formData.selectedSlot || submitting"
+        :loading="submitting"
         @click="handleSubmit"
       >
         送信する
       </v-btn>
     </v-card-actions>
+
+    <!-- Success/Error Dialog -->
+    <v-dialog v-model="showDialog" max-width="500">
+      <v-card>
+        <v-card-title :class="dialogType === 'success' ? 'bg-green' : 'bg-red'">
+          {{ dialogType === 'success' ? '予約完了' : 'エラー' }}
+        </v-card-title>
+        <v-card-text class="pt-4">
+          {{ dialogMessage }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="showDialog = false">閉じる</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import SlotPicker from './SlotPicker.vue'
+import { createReservation, type Menu } from '../services/api'
 
 interface FormData {
   lastName: string
   firstName: string
-  lastNameKana: string
-  firstNameKana: string
   email: string
-  phone: string
-  preferredDate: string
-  plan: string
-  participants: number | null
-  notes: string
+  menu: Menu | ''
+  selectedSlot: string // ISO string
 }
 
 const formRef = ref()
 const valid = ref(false)
+const submitting = ref(false)
+const showDialog = ref(false)
+const dialogType = ref<'success' | 'error'>('success')
+const dialogMessage = ref('')
 
 const formData = reactive<FormData>({
   lastName: '',
   firstName: '',
-  lastNameKana: '',
-  firstNameKana: '',
   email: '',
-  phone: '',
-  preferredDate: '',
-  plan: '',
-  participants: null,
-  notes: '',
+  menu: '',
+  selectedSlot: '',
 })
 
-const planOptions = [
+const menuOptions = [
   { title: 'スタンダードプラン（30分）', value: 'standard' },
   { title: 'プレミアムプラン（60分）', value: 'premium' },
   { title: 'ファミリープラン（90分）', value: 'family' },
@@ -198,26 +147,56 @@ const rules = {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return pattern.test(value) || '正しいメールアドレスを入力してください'
   },
-  phone: (value: string) => {
-    const pattern = /^[0-9-]+$/
-    return pattern.test(value) || '正しい電話番号を入力してください'
-  },
-  kana: (value: string) => {
-    const pattern = /^[ァ-ヶー]+$/
-    return pattern.test(value) || 'カタカナで入力してください'
-  },
-  number: (value: number | null) => {
-    return (value !== null && value > 0) || '1以上の数値を入力してください'
-  },
 }
 
 const handleSubmit = async () => {
-  const { valid } = await formRef.value.validate()
-  if (valid) {
-    console.log('Form submitted:', formData)
-    alert('お申し込みありがとうございます！確認メールをお送りいたしました。')
-    // ここで実際のAPI送信処理を行う
+  const { valid: isValid } = await formRef.value.validate()
+  if (!isValid || !formData.selectedSlot || !formData.menu) {
+    return
   }
+
+  submitting.value = true
+
+  try {
+    const response = await createReservation({
+      lastName: formData.lastName,
+      firstName: formData.firstName,
+      email: formData.email,
+      menu: formData.menu as Menu,
+      start: formData.selectedSlot,
+    })
+
+    if (response.ok) {
+      dialogType.value = 'success'
+      dialogMessage.value = 'ご予約ありがとうございます！確認メールをお送りいたしました。'
+      showDialog.value = true
+
+      // Reset form after successful submission
+      setTimeout(() => {
+        handleReset()
+      }, 2000)
+    } else {
+      dialogType.value = 'error'
+      dialogMessage.value = getErrorMessage(response.errorCode, response.message)
+      showDialog.value = true
+    }
+  } catch (error) {
+    dialogType.value = 'error'
+    dialogMessage.value = error instanceof Error ? error.message : '予約の送信に失敗しました'
+    showDialog.value = true
+  } finally {
+    submitting.value = false
+  }
+}
+
+const getErrorMessage = (errorCode?: string, message?: string): string => {
+  if (errorCode === 'SLOT_TAKEN') {
+    return '申し訳ございません。選択された時間枠はすでに予約済みです。別の時間をお選びください。'
+  }
+  if (errorCode === 'INVALID_TOKEN') {
+    return 'システムエラーが発生しました。管理者にお問い合わせください。'
+  }
+  return message || '予約の処理中にエラーが発生しました。'
 }
 
 const handleReset = () => {
@@ -225,14 +204,9 @@ const handleReset = () => {
   Object.assign(formData, {
     lastName: '',
     firstName: '',
-    lastNameKana: '',
-    firstNameKana: '',
     email: '',
-    phone: '',
-    preferredDate: '',
-    plan: '',
-    participants: null,
-    notes: '',
+    menu: '',
+    selectedSlot: '',
   })
 }
 </script>
