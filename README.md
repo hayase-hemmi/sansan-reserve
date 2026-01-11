@@ -158,9 +158,22 @@ npm run deploy
 
 ### GitHub側で必要な設定
 
+#### 1. GitHub Pagesの有効化
 1. GitHubリポジトリの **Settings** → **Pages** に移動
 2. **Source** を **GitHub Actions** に設定
-3. mainブランチにプッシュすると自動的にデプロイが実行されます
+
+#### 2. 環境変数（Secrets）の設定
+GitHubリポジトリの **Settings** → **Secrets and variables** → **Actions** に移動し、以下のSecretsを追加：
+
+- `VITE_GAS_ENDPOINT`: Google Apps Script Web App URL
+  - 例: `https://script.google.com/macros/s/AKfycbyoSwEK5sTPe6mO7eYw48vYnKlz6kDXoUtJDs3qv7XX8CgNUjzFcP2cYPW3GHBbEBDo3g/exec`
+- `VITE_API_TOKEN`: API認証トークン
+  - 例: `dac0a8a256cb383898371df7c0f0b3c50c444c81c58129d435789c6c493aa34f`
+
+**重要**: これらの値は `.env.example` に記載されている値と同じものを設定してください。
+
+#### 3. デプロイの実行
+mainブランチにプッシュすると自動的にデプロイが実行されます
 
 デプロイ後、以下のURLでアクセスできます：
 `https://<your-username>.github.io/sansan-reserve/`

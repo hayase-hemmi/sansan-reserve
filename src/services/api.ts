@@ -32,7 +32,11 @@ const GAS_ENDPOINT = import.meta.env.VITE_GAS_ENDPOINT
 const API_TOKEN = import.meta.env.VITE_API_TOKEN
 
 if (!GAS_ENDPOINT) {
-  console.warn('VITE_GAS_ENDPOINT is not set. Please create .env file.')
+  throw new Error('VITE_GAS_ENDPOINT is not set. Please configure environment variables.')
+}
+
+if (!API_TOKEN) {
+  throw new Error('VITE_API_TOKEN is not set. Please configure environment variables.')
 }
 
 /**
