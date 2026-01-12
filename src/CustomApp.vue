@@ -56,9 +56,9 @@ import { designTokens } from './styles/designTokens'
 .app-title {
   font-family: v-bind('designTokens.typography.fontFamily.heading');
   font-size: v-bind('designTokens.typography.fontSize.xl');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
+  font-weight: v-bind('designTokens.typography.fontWeight.bold');
   color: v-bind('designTokens.colors.text.primary');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
   margin: 0;
   flex-shrink: 0;
 }
@@ -70,9 +70,9 @@ import { designTokens } from './styles/designTokens'
 }
 
 .nav-link {
-  font-family: v-bind('designTokens.typography.fontFamily.primary');
+  font-family: v-bind('designTokens.typography.fontFamily.navigation');
   font-size: v-bind('designTokens.typography.fontSize.sm');
-  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
   color: v-bind('designTokens.colors.text.secondary');
   text-decoration: none;
   padding: v-bind('designTokens.spacing.sm') v-bind('designTokens.spacing.md');

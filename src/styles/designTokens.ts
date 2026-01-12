@@ -37,12 +37,17 @@ export const designTokens = {
     },
   },
 
-  // Typography
+  // Typography - Based on komori-aya.com
   typography: {
     fontFamily: {
-      primary: '"Noto Sans JP", "Zen Kaku Gothic Antique", sans-serif',
-      secondary: '"Shippori Antique", "Noto Serif JP", serif',
-      heading: '"Zen Kaku Gothic Antique", "Noto Sans JP", sans-serif',
+      // 本文: 英語優先（Lato, Inter）→ 日本語（Zen Kaku Gothic Antique）
+      primary: '"Lato", "Inter", "Zen Kaku Gothic Antique", sans-serif',
+      // セリフ体: 落ち着いた雰囲気の本文用
+      secondary: '"Shippori Antique", "Shippori Antique B1", serif',
+      // 見出し: 力強さと読みやすさ（Zen Kaku Gothic Antique優先）
+      heading: '"Zen Kaku Gothic Antique", "Lato", sans-serif',
+      // ナビゲーション: シンプルで読みやすく（Inter優先）
+      navigation: '"Inter", "Zen Kaku Gothic Antique", sans-serif',
     },
     fontSize: {
       xs: '0.75rem',     // 12px
@@ -51,7 +56,7 @@ export const designTokens = {
       lg: '1.125rem',    // 18px
       xl: '1.25rem',     // 20px
       '2xl': '1.5rem',   // 24px
-      '3xl': '1.875rem', // 30px
+      '3xl': '1.875rem', // 30px (komori-ayaのh1相当)
       '4xl': '2.25rem',  // 36px
     },
     fontWeight: {
@@ -60,18 +65,21 @@ export const designTokens = {
       medium: 500,
       semibold: 600,
       bold: 700,
+      heavy: 900,        // 見出し用の重めのウェイト
     },
     lineHeight: {
-      tight: 1.25,
+      tight: 1,          // komori-ayaの基本line-height
+      base: 1.4,         // テーブル・リッチテキスト用
       normal: 1.5,
       relaxed: 1.75,
-      loose: 2,
+      loose: 1.875,      // h1用 (30px)
     },
     letterSpacing: {
       tight: '-0.02em',
       normal: '0',
       wide: '0.02em',
       wider: '0.05em',
+      widest: '2.45px',  // タイトル用（komori-ayaと同じ）
     },
   },
 

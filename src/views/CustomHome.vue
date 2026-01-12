@@ -29,10 +29,10 @@ import { designTokens } from '../styles/designTokens'
 .page-header h1 {
   font-family: v-bind('designTokens.typography.fontFamily.heading');
   font-size: v-bind('designTokens.typography.fontSize["3xl"]');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
+  font-weight: v-bind('designTokens.typography.fontWeight.bold');
   color: v-bind('designTokens.colors.text.primary');
-  line-height: v-bind('designTokens.typography.lineHeight.tight');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
+  line-height: v-bind('designTokens.typography.lineHeight.loose');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.widest');
   margin: 0 0 v-bind('designTokens.spacing.lg') 0;
 }
 
@@ -40,8 +40,8 @@ import { designTokens } from '../styles/designTokens'
   font-family: v-bind('designTokens.typography.fontFamily.primary');
   font-size: v-bind('designTokens.typography.fontSize.base');
   color: v-bind('designTokens.colors.text.secondary');
-  line-height: v-bind('designTokens.typography.lineHeight.relaxed');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
+  line-height: v-bind('designTokens.typography.lineHeight.normal');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
   margin: 0;
 }
 
