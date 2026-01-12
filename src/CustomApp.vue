@@ -6,7 +6,13 @@ import { designTokens } from './styles/designTokens'
   <div class="app-wrapper">
     <header class="app-header">
       <div class="header-content">
-        <h1 class="app-title">Sansan Reserve</h1>
+        <router-link to="/" class="logo-link">
+          <img
+            src="./assets/img/full-text-logo.png"
+            alt="Sansan Reserve"
+            class="logo-img"
+          />
+        </router-link>
         <nav class="header-nav">
           <router-link to="/demo/form" class="nav-link">
             予約フォーム
@@ -46,21 +52,29 @@ import { designTokens } from './styles/designTokens'
 .header-content {
   max-width: v-bind('designTokens.layout.maxWidth.xl');
   margin: 0 auto;
-  padding: v-bind('designTokens.spacing.lg') v-bind('designTokens.spacing.xl');
+  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.xl');
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: v-bind('designTokens.spacing.xl');
 }
 
-.app-title {
-  font-family: v-bind('designTokens.typography.fontFamily.heading');
-  font-size: v-bind('designTokens.typography.fontSize.xl');
-  font-weight: v-bind('designTokens.typography.fontWeight.bold');
-  color: v-bind('designTokens.colors.text.primary');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
-  margin: 0;
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
   flex-shrink: 0;
+}
+
+.logo-img {
+  height: 56px;
+  width: auto;
+  object-fit: contain;
+  transition: opacity v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
+}
+
+.logo-link:hover .logo-img {
+  opacity: 0.8;
 }
 
 .header-nav {
@@ -98,14 +112,14 @@ import { designTokens } from './styles/designTokens'
 
 @media (max-width: 768px) {
   .header-content {
-    padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.lg');
+    padding: v-bind('designTokens.spacing.sm') v-bind('designTokens.spacing.lg');
     flex-direction: column;
     align-items: flex-start;
     gap: v-bind('designTokens.spacing.md');
   }
 
-  .app-title {
-    font-size: v-bind('designTokens.typography.fontSize.lg');
+  .logo-img {
+    height: 40px;
   }
 
   .header-nav {
