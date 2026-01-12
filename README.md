@@ -9,8 +9,8 @@
 - **TypeScript** - 型安全な開発環境
 - **Vite** - 高速ビルドツール
 - **Vue Router** - 公式ルーティングライブラリ
-- **Vuetify 3** - Material Designコンポーネントライブラリ
-- **Tailwind CSS v4** - ユーティリティファーストCSSフレームワーク
+- **カスタムUIコンポーネント** - Vuetifyを使わない純粋なHTML/CSSによる実装
+- **デザイントークン** - 一貫したデザインシステム
 - **ホスティング** - GitHub Pages（静的サイト）
 
 ### バックエンド
@@ -45,22 +45,35 @@
 
 ```
 sansan-reserve/
-├── src/                    # Vue フロントエンド
+├── src/                             # Vue フロントエンド
+│   ├── CustomApp.vue                # カスタムUI版のルートコンポーネント
+│   ├── custom-main.ts               # カスタムUI版のエントリーポイント
 │   ├── components/
-│   │   ├── BasicInfoForm.vue
-│   │   └── SlotPicker.vue
+│   │   ├── CustomBasicInfoForm.vue  # カスタムフォーム
+│   │   ├── CustomSlotPicker.vue     # カスタム時間枠選択
+│   │   └── ui/                      # カスタムUIコンポーネント
+│   │       ├── BaseInput.vue        # 入力フィールド
+│   │       ├── BaseSelect.vue       # セレクトボックス
+│   │       └── BaseButton.vue       # ボタン
+│   ├── views/
+│   │   ├── CustomHome.vue           # 予約フォームページ
+│   │   ├── DemoComponents.vue       # コンポーネントデモページ
+│   │   └── DemoDesignTokens.vue     # デザイントークンデモページ
+│   ├── styles/
+│   │   └── designTokens.ts          # デザイントークン定義
 │   ├── services/
-│   │   └── api.ts         # GAS API クライアント
-│   └── ...
-├── gas/                    # Google Apps Script バックエンド
+│   │   └── api.ts                   # GAS API クライアント
+│   └── plugins/
+│       └── customRouter.ts          # ルーター設定
+├── gas/                             # Google Apps Script バックエンド
 │   ├── src/
-│   │   ├── main.ts        # エントリーポイント
-│   │   ├── calendar.ts    # カレンダー操作
-│   │   ├── auth.ts        # 認証
-│   │   ├── util.ts        # ユーティリティ
-│   │   └── types.ts       # 型定義
-│   └── README.md          # GAS セットアップガイド
-└── ...
+│   │   ├── main.ts                  # エントリーポイント
+│   │   ├── calendar.ts              # カレンダー操作
+│   │   ├── auth.ts                  # 認証
+│   │   ├── util.ts                  # ユーティリティ
+│   │   └── types.ts                 # 型定義
+│   └── README.md                    # GAS セットアップガイド
+└── index.html                       # カスタムUI版のHTML
 ```
 
 ## セットアップ
@@ -113,13 +126,36 @@ VITE_API_TOKEN=your-secret-token
 ```bash
 # 開発サーバーの起動
 npm run dev
+# http://localhost:5173/ でアクセス
+```
 
+**デモページ:**
+- `/demo/form` - 予約フォーム（実際の動作確認）
+- `/demo/components` - UIコンポーネント一覧
+- `/demo/design-tokens` - デザイントークン一覧
+
+```bash
 # ビルド
 npm run build
 
 # プレビュー
 npm run preview
 ```
+
+### カスタムUIについて
+
+このプロジェクトは **Vuetifyを使わない** カスタムUIコンポーネントで構築されています。
+
+**特徴:**
+- 純粋なHTML/CSSによる実装
+- デザイントークンによる一貫したデザインシステム
+- 小森あやウェブサイトのデザインを参考にした温かみのあるベージュ系配色
+- レスポンシブ対応
+- アクセシビリティ対応
+
+**デザイントークン:**
+- 色、タイポグラフィ、スペーシング、シャドウなどを `src/styles/designTokens.ts` で一元管理
+- 今後のデザイン変更が容易
 
 ### バックエンド開発
 

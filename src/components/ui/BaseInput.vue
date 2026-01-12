@@ -1,0 +1,128 @@
+<template>
+  <div class="input-wrapper">
+    <label v-if="label" :for="id" class="input-label">
+      {{ label }}
+      <span v-if="required" class="required">*</span>
+    </label>
+    <input
+      :id="id"
+      :type="type"
+      :value="modelValue"
+      :placeholder="placeholder"
+      :required="required"
+      :disabled="disabled"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @blur="handleBlur"
+      class="input-field"
+      :class="{ 'has-error': errorMessage }"
+    />
+    <span v-if="errorMessage" class="error-message">{{ errorMessage }}</span>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { designTokens } from '../../styles/designTokens'
+
+interface Props {
+  id?: string
+  label?: string
+  type?: string
+  modelValue: string
+  placeholder?: string
+  required?: boolean
+  disabled?: boolean
+  rules?: Array<(value: string) => true | string>
+}
+
+interface Emits {
+  (e: 'update:modelValue', value: string): void
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  type: 'text',
+  required: false,
+  disabled: false,
+})
+
+const emit = defineEmits<Emits>()
+
+const errorMessage = ref('')
+
+const handleBlur = () => {
+  if (props.rules) {
+    for (const rule of props.rules) {
+      const result = rule(props.modelValue)
+      if (result !== true) {
+        errorMessage.value = result
+        return
+      }
+    }
+  }
+  errorMessage.value = ''
+}
+</script>
+
+<style scoped>
+.input-wrapper {
+  margin-bottom: v-bind('designTokens.spacing.lg');
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-family: v-bind('designTokens.typography.fontFamily.primary');
+  font-size: v-bind('designTokens.typography.fontSize.sm');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+  color: v-bind('designTokens.colors.text.primary');
+  margin-bottom: v-bind('designTokens.spacing.sm');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
+}
+
+.required {
+  color: v-bind('designTokens.colors.status.error');
+  margin-left: 2px;
+}
+
+.input-field {
+  font-family: v-bind('designTokens.typography.fontFamily.primary');
+  font-size: v-bind('designTokens.typography.fontSize.base');
+  padding: v-bind('designTokens.spacing.md');
+  border: 1px solid v-bind('designTokens.colors.border.medium');
+  border-radius: v-bind('designTokens.borderRadius.md');
+  background-color: v-bind('designTokens.colors.background.input');
+  color: v-bind('designTokens.colors.text.primary');
+  transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-field:hover {
+  border-color: v-bind('designTokens.colors.border.focus');
+}
+
+.input-field:focus {
+  border-color: v-bind('designTokens.colors.accent.primary');
+  border-width: 2px;
+  padding: calc(v-bind('designTokens.spacing.md') - 1px);
+  box-shadow: v-bind('designTokens.shadows.sm');
+}
+
+.input-field:disabled {
+  background-color: v-bind('designTokens.colors.background.hover');
+  color: v-bind('designTokens.colors.text.disabled');
+  cursor: not-allowed;
+}
+
+.input-field.has-error {
+  border-color: v-bind('designTokens.colors.status.error');
+}
+
+.error-message {
+  font-size: v-bind('designTokens.typography.fontSize.xs');
+  color: v-bind('designTokens.colors.status.error');
+  margin-top: v-bind('designTokens.spacing.xs');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+}
+</style>

@@ -17,15 +17,38 @@
     <!-- Loading state -->
     <v-row v-if="loading">
       <v-col cols="12" class="text-center">
-        <v-progress-circular indeterminate color="primary"></v-progress-circular>
-        <p class="mt-2 text-gray-600">空き枠を確認しています...</p>
+        <v-progress-circular
+          indeterminate
+          :color="designTokens.colors.accent.primary"
+          :style="{
+            marginBottom: designTokens.spacing.md,
+          }"
+        ></v-progress-circular>
+        <p
+          :style="{
+            color: designTokens.colors.text.secondary,
+            fontSize: designTokens.typography.fontSize.sm,
+            marginTop: designTokens.spacing.sm,
+          }"
+        >
+          空き枠を確認しています...
+        </p>
       </v-col>
     </v-row>
 
     <!-- Error state -->
     <v-row v-else-if="error">
       <v-col cols="12">
-        <v-alert type="error" variant="tonal">
+        <v-alert
+          type="error"
+          variant="tonal"
+          :style="{
+            backgroundColor: `${designTokens.colors.status.error}15`,
+            color: designTokens.colors.status.error,
+            borderRadius: designTokens.borderRadius.md,
+            border: `1px solid ${designTokens.colors.status.error}40`,
+          }"
+        >
           {{ error }}
         </v-alert>
       </v-col>
@@ -34,7 +57,16 @@
     <!-- Time Slots -->
     <v-row v-else-if="slots.length > 0">
       <v-col cols="12">
-        <p class="text-sm text-gray-600 mb-3">ご希望の時間帯を選択してください</p>
+        <p
+          :style="{
+            fontSize: designTokens.typography.fontSize.sm,
+            color: designTokens.colors.text.secondary,
+            marginBottom: designTokens.spacing.md,
+            fontWeight: designTokens.typography.fontWeight.medium,
+          }"
+        >
+          ご希望の時間帯を選択してください
+        </p>
         <v-chip-group
           v-model="selectedSlotIndex"
           column
@@ -45,12 +77,21 @@
             :key="index"
             :value="index"
             :disabled="!slot.available"
-            :color="slot.available ? 'primary' : 'grey'"
             :variant="selectedSlotIndex === index ? 'elevated' : 'outlined'"
-            class="ma-1"
+            class="time-slot-chip"
+            :class="{ 'selected': selectedSlotIndex === index, 'available': slot.available }"
           >
             {{ formatTime(slot.start) }} - {{ formatTime(slot.end) }}
-            <span v-if="!slot.available" class="ml-2 text-xs">(予約済)</span>
+            <span
+              v-if="!slot.available"
+              :style="{
+                marginLeft: designTokens.spacing.sm,
+                fontSize: designTokens.typography.fontSize.xs,
+                opacity: 0.7,
+              }"
+            >
+              (予約済)
+            </span>
           </v-chip>
         </v-chip-group>
       </v-col>
@@ -59,7 +100,16 @@
     <!-- No slots available -->
     <v-row v-else-if="selectedDate">
       <v-col cols="12">
-        <v-alert type="info" variant="tonal">
+        <v-alert
+          type="info"
+          variant="tonal"
+          :style="{
+            backgroundColor: `${designTokens.colors.status.info}15`,
+            color: designTokens.colors.status.info,
+            borderRadius: designTokens.borderRadius.md,
+            border: `1px solid ${designTokens.colors.status.info}40`,
+          }"
+        >
           選択した日付には空きがありません。別の日付をお選びください。
         </v-alert>
       </v-col>
@@ -70,6 +120,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { getAvailability, type TimeSlot, type Menu, getMenuDuration, toJSTISOString } from '../services/api'
+import { designTokens } from '../styles/designTokens'
 
 interface Props {
   menu: Menu | string
@@ -168,7 +219,38 @@ const formatTime = (isoString: string): string => {
 </script>
 
 <style scoped>
-.v-chip {
+.time-slot-chip {
   min-width: 140px;
+  margin: 0.25rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.time-slot-chip.available {
+  background-color: v-bind('designTokens.colors.background.card');
+  color: v-bind('designTokens.colors.accent.primary');
+  border-color: v-bind('designTokens.colors.accent.primary');
+}
+
+.time-slot-chip.available:hover {
+  background-color: v-bind('designTokens.colors.accent.hover');
+  border-color: v-bind('designTokens.colors.accent.primary');
+  transform: translateY(-1px);
+  box-shadow: v-bind('designTokens.shadows.sm');
+}
+
+.time-slot-chip.selected {
+  background-color: v-bind('designTokens.colors.accent.primary');
+  color: v-bind('designTokens.colors.background.card');
+  border-color: v-bind('designTokens.colors.accent.primary');
+  box-shadow: v-bind('designTokens.shadows.md');
+}
+
+.time-slot-chip:disabled {
+  opacity: 0.5;
+  background-color: v-bind('designTokens.colors.background.hover');
+  color: v-bind('designTokens.colors.text.disabled');
+  border-color: v-bind('designTokens.colors.border.light');
 }
 </style>

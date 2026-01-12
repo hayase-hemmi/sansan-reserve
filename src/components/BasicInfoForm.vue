@@ -1,10 +1,30 @@
 <template>
-  <v-card class="mx-auto" max-width="800">
-    <v-card-title class="text-h5 bg-primary">
+  <v-card
+    class="mx-auto"
+    max-width="800"
+    :style="{
+      boxShadow: designTokens.shadows.md,
+    }"
+  >
+    <v-card-title
+      :style="{
+        backgroundColor: designTokens.colors.accent.primary,
+        color: designTokens.colors.background.card,
+        fontSize: designTokens.typography.fontSize.xl,
+        fontWeight: designTokens.typography.fontWeight.semibold,
+        fontFamily: designTokens.typography.fontFamily.heading,
+        padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
+        letterSpacing: designTokens.typography.letterSpacing.wide,
+      }"
+    >
       基本情報入力
     </v-card-title>
 
-    <v-card-text class="pt-6">
+    <v-card-text
+      :style="{
+        padding: `${designTokens.spacing['2xl']} ${designTokens.spacing.xl}`,
+      }"
+    >
       <v-form ref="formRef" v-model="valid">
         <v-row>
           <!-- お名前（姓） -->
@@ -67,13 +87,25 @@
       </v-form>
     </v-card-text>
 
-    <v-card-actions class="px-6 pb-6">
+    <v-card-actions
+      :style="{
+        padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl} ${designTokens.spacing['2xl']}`,
+        gap: designTokens.spacing.md,
+      }"
+    >
       <v-spacer></v-spacer>
       <v-btn
-        color="grey"
         variant="outlined"
         @click="handleReset"
         :disabled="submitting"
+        :style="{
+          color: designTokens.colors.text.secondary,
+          borderColor: designTokens.colors.border.medium,
+          padding: `${designTokens.spacing.md} ${designTokens.spacing.xl}`,
+          fontSize: designTokens.typography.fontSize.base,
+          fontWeight: designTokens.typography.fontWeight.medium,
+          borderRadius: designTokens.borderRadius.md,
+        }"
       >
         クリア
       </v-btn>
@@ -83,6 +115,15 @@
         :disabled="!valid || !formData.selectedSlot || submitting"
         :loading="submitting"
         @click="handleSubmit"
+        :style="{
+          backgroundColor: designTokens.colors.accent.primary,
+          color: designTokens.colors.background.card,
+          padding: `${designTokens.spacing.md} ${designTokens.spacing['2xl']}`,
+          fontSize: designTokens.typography.fontSize.base,
+          fontWeight: designTokens.typography.fontWeight.semibold,
+          borderRadius: designTokens.borderRadius.md,
+          boxShadow: designTokens.shadows.sm,
+        }"
       >
         送信する
       </v-btn>
@@ -90,16 +131,51 @@
 
     <!-- Success/Error Dialog -->
     <v-dialog v-model="showDialog" max-width="500">
-      <v-card>
-        <v-card-title :class="dialogType === 'success' ? 'bg-green' : 'bg-red'">
+      <v-card
+        :style="{
+          boxShadow: designTokens.shadows.lg,
+          borderRadius: designTokens.borderRadius.lg,
+        }"
+      >
+        <v-card-title
+          :style="{
+            backgroundColor: dialogType === 'success' ? designTokens.colors.status.success : designTokens.colors.status.error,
+            color: designTokens.colors.background.card,
+            fontSize: designTokens.typography.fontSize.xl,
+            fontWeight: designTokens.typography.fontWeight.semibold,
+            padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
+          }"
+        >
           {{ dialogType === 'success' ? '予約完了' : 'エラー' }}
         </v-card-title>
-        <v-card-text class="pt-4">
+        <v-card-text
+          :style="{
+            padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
+            color: designTokens.colors.text.primary,
+            fontSize: designTokens.typography.fontSize.base,
+            lineHeight: designTokens.typography.lineHeight.relaxed,
+          }"
+        >
           {{ dialogMessage }}
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions
+          :style="{
+            padding: `${designTokens.spacing.md} ${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
+          }"
+        >
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="showDialog = false">閉じる</v-btn>
+          <v-btn
+            color="primary"
+            @click="showDialog = false"
+            :style="{
+              backgroundColor: designTokens.colors.accent.primary,
+              color: designTokens.colors.background.card,
+              padding: `${designTokens.spacing.md} ${designTokens.spacing.xl}`,
+              borderRadius: designTokens.borderRadius.md,
+            }"
+          >
+            閉じる
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -110,6 +186,7 @@
 import { ref, reactive } from 'vue'
 import SlotPicker from './SlotPicker.vue'
 import { createReservation, type Menu } from '../services/api'
+import { designTokens } from '../styles/designTokens'
 
 interface FormData {
   lastName: string
@@ -212,7 +289,21 @@ const handleReset = () => {
 </script>
 
 <style scoped>
-.v-card-title {
-  color: white;
+/* Custom styling for form inputs */
+:deep(.v-field__outline) {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:deep(.v-field--focused .v-field__outline) {
+  border-width: 2px;
+}
+
+:deep(.v-input) {
+  margin-bottom: 0.5rem;
+}
+
+:deep(.v-label) {
+  font-weight: 500;
+  letter-spacing: 0.02em;
 }
 </style>
