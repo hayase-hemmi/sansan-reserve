@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { designTokens } from '../../styles/designTokens'
 
 interface Option {
@@ -71,6 +71,22 @@ const handleBlur = () => {
   }
   errorMessage.value = ''
 }
+
+// リセット機能: 値が空文字列になったらエラーメッセージもクリア
+const clearError = () => {
+  errorMessage.value = ''
+}
+
+watch(() => props.modelValue, (newValue) => {
+  if (newValue === '') {
+    clearError()
+  }
+})
+
+// コンポーネントから呼び出せるようにする
+defineExpose({
+  clearError
+})
 </script>
 
 <style scoped>

@@ -6,6 +6,7 @@
           <div class="form-row">
             <div class="form-col">
               <BaseInput
+                ref="lastNameInput"
                 v-model="formData.lastName"
                 label="お名前（姓）"
                 placeholder="山田"
@@ -16,6 +17,7 @@
 
             <div class="form-col">
               <BaseInput
+                ref="firstNameInput"
                 v-model="formData.firstName"
                 label="お名前（名）"
                 placeholder="太郎"
@@ -26,6 +28,7 @@
           </div>
 
           <BaseInput
+            ref="emailInput"
             v-model="formData.email"
             label="メールアドレス"
             type="email"
@@ -117,6 +120,11 @@ const showDialog = ref(false)
 const dialogType = ref<'success' | 'error'>('success')
 const dialogMessage = ref('')
 
+// Input refs
+const lastNameInput = ref()
+const firstNameInput = ref()
+const emailInput = ref()
+
 const formData = reactive<FormData>({
   lastName: '',
   firstName: '',
@@ -200,6 +208,11 @@ const handleReset = () => {
     menu: '',
     selectedSlot: '',
   })
+
+  // バリデーションエラーもクリア
+  lastNameInput.value?.clearError()
+  firstNameInput.value?.clearError()
+  emailInput.value?.clearError()
 }
 </script>
 
