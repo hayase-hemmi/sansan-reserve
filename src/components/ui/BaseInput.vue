@@ -88,7 +88,7 @@ const handleBlur = () => {
   font-family: v-bind('designTokens.typography.fontFamily.primary');
   font-size: v-bind('designTokens.typography.fontSize.base');
   padding: v-bind('designTokens.spacing.md');
-  border: 1px solid v-bind('designTokens.colors.border.medium');
+  border: 2px solid v-bind('designTokens.colors.accent.secondary');
   border-radius: v-bind('designTokens.borderRadius.md');
   background-color: v-bind('designTokens.colors.background.input');
   color: v-bind('designTokens.colors.text.primary');
@@ -99,13 +99,11 @@ const handleBlur = () => {
 }
 
 .input-field:hover {
-  border-color: v-bind('designTokens.colors.border.focus');
+  border-color: v-bind('designTokens.colors.accent.primary');
 }
 
 .input-field:focus {
   border-color: v-bind('designTokens.colors.accent.primary');
-  border-width: 2px;
-  padding: calc(v-bind('designTokens.spacing.md') - 1px);
   box-shadow: v-bind('designTokens.shadows.sm');
 }
 

@@ -7,33 +7,33 @@
 export const designTokens = {
   // Color Palette
   colors: {
-    // Primary colors - warm beige tones
+    // Primary colors - light blue tones
     background: {
-      main: '#fbf7f0',      // Warm beige background
+      main: '#e7f0f7',      // Very light blue background
       card: '#ffffff',      // White card background
-      hover: '#f6f6f6',     // Light gray for hover states
+      hover: '#f0f6fa',     // Even lighter blue for hover states
       input: '#ffffff',     // Input field background
     },
     text: {
-      primary: '#423e3e',   // Deep gray for main text
-      secondary: '#6b6766', // Medium gray for secondary text
-      disabled: '#a8a4a3',  // Light gray for disabled text
+      primary: '#2c3e50',   // Deep blue-gray for main text
+      secondary: '#5a6c7d', // Medium blue-gray for secondary text
+      disabled: '#95a5b3',  // Light blue-gray for disabled text
     },
     accent: {
-      primary: '#d4b5a0',   // Warm dusty rose
-      secondary: '#e8d5c4', // Light warm beige
-      hover: '#f2eee5',     // Very light beige for tag hover
+      primary: '#52372d',   // Brown (accent color) (82, 55, 45)
+      secondary: '#a68a7b', // Light brown (secondary accent)
+      hover: '#d9cdc5',     // Very light brown for tag hover
     },
     border: {
-      light: '#e8e4df',     // Light border
-      medium: '#d4cfc9',    // Medium border
-      focus: '#d4b5a0',     // Focus state border (accent)
+      light: '#d9e8f2',     // Light blue border
+      medium: '#b8d0e0',    // Medium blue border
+      focus: '#52372d',     // Focus state border (brown accent)
     },
     status: {
-      success: '#7c9e7a',   // Muted green
+      success: '#6ba572',   // Muted green
       error: '#c87c7c',     // Muted red
       warning: '#d4a574',   // Muted orange
-      info: '#7b9eb8',      // Muted blue
+      info: '#5a9ab8',      // Blue for info (matching accent)
     },
   },
 

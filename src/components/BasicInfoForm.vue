@@ -6,20 +6,6 @@
       boxShadow: designTokens.shadows.md,
     }"
   >
-    <v-card-title
-      :style="{
-        backgroundColor: designTokens.colors.accent.primary,
-        color: designTokens.colors.background.card,
-        fontSize: designTokens.typography.fontSize.xl,
-        fontWeight: designTokens.typography.fontWeight.semibold,
-        fontFamily: designTokens.typography.fontFamily.heading,
-        padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
-        letterSpacing: designTokens.typography.letterSpacing.wide,
-      }"
-    >
-      基本情報入力
-    </v-card-title>
-
     <v-card-text
       :style="{
         padding: `${designTokens.spacing['2xl']} ${designTokens.spacing.xl}`,
@@ -66,14 +52,18 @@
 
           <!-- 撮影メニュー -->
           <v-col cols="12">
-            <v-select
-              v-model="formData.menu"
-              :items="menuOptions"
-              :rules="[rules.required]"
-              label="撮影メニュー"
-              variant="outlined"
-              required
-            ></v-select>
+            <div class="menu-section">
+              <label class="menu-label">撮影メニュー <span class="required">*</span></label>
+              <div class="menu-grid">
+                <MenuCard
+                  v-for="menu in menuOptions"
+                  :key="menu.value"
+                  :menu="menu"
+                  :selected-menu="formData.menu"
+                  @select="formData.menu = menu.value"
+                />
+              </div>
+            </div>
           </v-col>
 
           <!-- 撮影日時選択 -->
@@ -185,8 +175,10 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import SlotPicker from './SlotPicker.vue'
+import MenuCard from './MenuCard.vue'
 import { createReservation, type Menu } from '../services/api'
 import { designTokens } from '../styles/designTokens'
+import { menuOptions } from '../data/menuData'
 
 interface FormData {
   lastName: string
@@ -210,13 +202,6 @@ const formData = reactive<FormData>({
   menu: '',
   selectedSlot: '',
 })
-
-const menuOptions = [
-  { title: 'スタンダードプラン（30分）', value: 'standard' },
-  { title: 'プレミアムプラン（60分）', value: 'premium' },
-  { title: 'ファミリープラン（90分）', value: 'family' },
-  { title: 'ウェディングプラン（120分）', value: 'wedding' },
-]
 
 const rules = {
   required: (value: string | number | null) => !!value || '必須項目です',
@@ -305,5 +290,45 @@ const handleReset = () => {
 :deep(.v-label) {
   font-weight: 500;
   letter-spacing: 0.02em;
+}
+
+/* Vuetifyフィールドのボーダー色を統一 */
+:deep(.v-field__outline__start),
+:deep(.v-field__outline__end) {
+  border-color: v-bind('designTokens.colors.accent.secondary') !important;
+  border-width: 2px !important;
+}
+
+:deep(.v-field--variant-outlined:hover .v-field__outline__start),
+:deep(.v-field--variant-outlined:hover .v-field__outline__end) {
+  border-color: v-bind('designTokens.colors.accent.primary') !important;
+}
+
+:deep(.v-field--focused .v-field__outline__start),
+:deep(.v-field--focused .v-field__outline__end) {
+  border-color: v-bind('designTokens.colors.accent.primary') !important;
+}
+
+.menu-section {
+  margin-bottom: 1.5rem;
+}
+
+.menu-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: v-bind('designTokens.colors.text.primary');
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.menu-label .required {
+  color: v-bind('designTokens.colors.status.error');
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 </style>

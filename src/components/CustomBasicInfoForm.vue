@@ -1,10 +1,6 @@
 <template>
   <div class="form-container">
     <div class="form-card">
-      <div class="card-header">
-        <h2>基本情報入力</h2>
-      </div>
-
       <div class="card-body">
         <form @submit.prevent="handleSubmit">
           <div class="form-row">
@@ -38,13 +34,18 @@
             :rules="[rules.required, rules.email]"
           />
 
-          <BaseSelect
-            v-model="formData.menu"
-            label="撮影メニュー"
-            :options="menuOptions"
-            :required="true"
-            :rules="[rules.required]"
-          />
+          <div class="menu-section">
+            <label class="menu-label">撮影メニュー <span class="required">*</span></label>
+            <div class="menu-grid">
+              <MenuCard
+                v-for="menu in menuOptions"
+                :key="menu.value"
+                :menu="menu"
+                :selected-menu="formData.menu"
+                @select="formData.menu = menu.value"
+              />
+            </div>
+          </div>
 
           <CustomSlotPicker
             v-model="formData.selectedSlot"
@@ -96,11 +97,12 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import BaseInput from './ui/BaseInput.vue'
-import BaseSelect from './ui/BaseSelect.vue'
 import BaseButton from './ui/BaseButton.vue'
+import MenuCard from './MenuCard.vue'
 import CustomSlotPicker from './CustomSlotPicker.vue'
 import { createReservation, type Menu } from '../services/api'
 import { designTokens } from '../styles/designTokens'
+import { menuOptions } from '../data/menuData'
 
 interface FormData {
   lastName: string
@@ -122,13 +124,6 @@ const formData = reactive<FormData>({
   menu: '',
   selectedSlot: '',
 })
-
-const menuOptions = [
-  { title: 'スタンダードプラン（30分）', value: 'standard' },
-  { title: 'プレミアムプラン（60分）', value: 'premium' },
-  { title: 'ファミリープラン（90分）', value: 'family' },
-  { title: 'ウェディングプラン（120分）', value: 'wedding' },
-]
 
 const rules = {
   required: (value: string | number | null) => !!value || '必須項目です',
@@ -223,20 +218,6 @@ const handleReset = () => {
   overflow: hidden;
 }
 
-.card-header {
-  background-color: v-bind('designTokens.colors.accent.primary');
-  color: v-bind('designTokens.colors.background.card');
-  padding: v-bind('designTokens.spacing.xl');
-}
-
-.card-header h2 {
-  font-family: v-bind('designTokens.typography.fontFamily.heading');
-  font-size: v-bind('designTokens.typography.fontSize.xl');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
-  margin: 0;
-}
-
 .card-body {
   padding: v-bind('designTokens.spacing["2xl"]') v-bind('designTokens.spacing.xl');
 }
@@ -250,6 +231,29 @@ const handleReset = () => {
 
 .form-col {
   min-width: 0;
+}
+
+.menu-section {
+  margin-bottom: v-bind('designTokens.spacing.xl');
+}
+
+.menu-label {
+  display: block;
+  font-size: v-bind('designTokens.typography.fontSize.sm');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+  color: v-bind('designTokens.colors.text.primary');
+  margin-bottom: v-bind('designTokens.spacing.md');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
+}
+
+.menu-label .required {
+  color: v-bind('designTokens.colors.status.error');
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: v-bind('designTokens.spacing.lg');
 }
 
 .form-actions {
