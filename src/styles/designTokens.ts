@@ -9,9 +9,9 @@ export const designTokens = {
   colors: {
     // Primary colors - light blue tones
     background: {
-      main: '#bed8e9',      // Light blue background (190, 216, 233)
+      main: '#c3eaf7',      // Light blue background (195, 234, 247)
       card: '#ffffff',      // White card background
-      hover: '#d9e8f2',     // Even lighter blue for hover states
+      hover: '#e1f4fb',     // Even lighter blue for hover states
       input: '#ffffff',     // Input field background
     },
     text: {
