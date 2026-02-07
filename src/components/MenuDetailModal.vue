@@ -31,11 +31,36 @@
             </div>
           </div>
 
-          <div class="mdm-includes">
-            <span class="mdm-includes-label">プラン内容</span>
-            <ul class="mdm-includes-list">
-              <li v-for="(detail, i) in menu.details" :key="i">{{ detail }}</li>
-            </ul>
+          <div class="mdm-sections">
+            <div
+              v-for="(section, sIdx) in menu.sections"
+              :key="sIdx"
+              class="mdm-section"
+            >
+              <h4 class="mdm-section-title">{{ section.title }}</h4>
+              <div class="mdm-section-content">
+                <template v-for="(item, iIdx) in section.items" :key="iIdx">
+                  <p v-if="item.type === 'text'" class="mdm-item-text">
+                    {{ item.text }}
+                  </p>
+                  <div v-else-if="item.type === 'bullet'" class="mdm-item-bullet">
+                    {{ item.text }}
+                  </div>
+                  <div v-else-if="item.type === 'note'" class="mdm-item-note">
+                    <span class="mdm-note-mark">※</span>{{ item.text }}
+                  </div>
+                  <div v-else-if="item.type === 'sub-item'" class="mdm-item-sub">
+                    {{ item.text }}
+                  </div>
+                  <div v-else-if="item.type === 'example-ok'" class="mdm-item-example mdm-example-ok">
+                    <span class="mdm-example-mark">○</span>{{ item.text }}
+                  </div>
+                  <div v-else-if="item.type === 'example-ng'" class="mdm-item-example mdm-example-ng">
+                    <span class="mdm-example-mark">×</span>{{ item.text }}
+                  </div>
+                </template>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -215,42 +240,108 @@ const handleSelect = () => {
   font-size: 0.875rem;
 }
 
-.mdm-includes {
+/* ── Sections ── */
+.mdm-sections {
   border-top: 1px solid #d9e8f2;
   padding-top: 1.5rem;
 }
 
-.mdm-includes-label {
-  display: block;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #5a6c7d;
+.mdm-section {
+  margin-bottom: 1.75rem;
+}
+
+.mdm-section:last-child {
+  margin-bottom: 0;
+}
+
+.mdm-section-title {
+  font-family: "Shippori Antique", "Shippori Antique B1", serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: #52372d;
   letter-spacing: 0.08em;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.625rem 0;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid #d9cdc5;
 }
 
-.mdm-includes-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.mdm-section-content {
+  padding-left: 0;
 }
 
-.mdm-includes-list li {
-  position: relative;
-  padding-left: 1.5rem;
-  font-size: 0.875rem;
+/* Text (plain paragraph) */
+.mdm-item-text {
+  font-size: 0.8125rem;
   color: #2c3e50;
   line-height: 1.75;
+  margin: 0 0 0.25rem 0;
 }
 
-.mdm-includes-list li::before {
-  content: '';
+/* Bullet items */
+.mdm-item-bullet {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.8125rem;
+  color: #2c3e50;
+  line-height: 1.75;
+  margin-bottom: 0.375rem;
+}
+
+.mdm-item-bullet::before {
+  content: '\30FB';
+  position: absolute;
+  left: 0;
+  color: #a68a7b;
+}
+
+/* Note items */
+.mdm-item-note {
+  font-size: 0.75rem;
+  color: #5a6c7d;
+  line-height: 1.75;
+  margin: 0.25rem 0 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  background-color: #f5f0ec;
+  border-left: 2px solid #a68a7b;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.mdm-note-mark {
+  color: #a68a7b;
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+/* Sub-items (indented detail lines) */
+.mdm-item-sub {
+  padding-left: 1rem;
+  font-size: 0.75rem;
+  color: #5a6c7d;
+  line-height: 1.75;
+  margin-bottom: 0.125rem;
+}
+
+/* Example items */
+.mdm-item-example {
+  padding-left: 1.75rem;
+  font-size: 0.75rem;
+  line-height: 1.75;
+  margin-bottom: 0.25rem;
+  position: relative;
+}
+
+.mdm-example-mark {
   position: absolute;
   left: 0.25rem;
-  top: 0.65em;
-  width: 6px;
-  height: 1px;
-  background-color: #a68a7b;
+  font-weight: 500;
+}
+
+.mdm-example-ok {
+  color: #6ba572;
+}
+
+.mdm-example-ng {
+  color: #c87c7c;
 }
 
 .mdm-footer {
