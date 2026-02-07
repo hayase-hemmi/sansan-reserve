@@ -1,184 +1,130 @@
 <template>
-  <v-card
-    class="mx-auto"
-    max-width="800"
-    :style="{
-      boxShadow: designTokens.shadows.md,
-    }"
-  >
-    <v-card-text
-      :style="{
-        padding: `${designTokens.spacing['2xl']} ${designTokens.spacing.xl}`,
-      }"
-    >
-      <v-form ref="formRef" v-model="valid">
-        <v-row>
-          <!-- お名前（姓） -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="formData.lastName"
-              :rules="[rules.required]"
-              label="お名前（姓）"
-              placeholder="山田"
-              variant="outlined"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- お名前（名） -->
-          <v-col cols="12" md="6">
-            <v-text-field
-              v-model="formData.firstName"
-              :rules="[rules.required]"
-              label="お名前（名）"
-              placeholder="太郎"
-              variant="outlined"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- メールアドレス -->
-          <v-col cols="12">
-            <v-text-field
-              v-model="formData.email"
-              :rules="[rules.required, rules.email]"
-              label="メールアドレス"
-              placeholder="example@example.com"
-              variant="outlined"
-              type="email"
-              required
-            ></v-text-field>
-          </v-col>
-
-          <!-- 撮影メニュー -->
-          <v-col cols="12">
-            <div class="menu-section">
-              <label class="menu-label">撮影メニュー <span class="required">*</span></label>
-              <div class="menu-grid">
-                <MenuCard
-                  v-for="menu in menuOptions"
-                  :key="menu.value"
-                  :menu="menu"
-                  :selected-menu="formData.menu"
-                  @select="formData.menu = menu.value"
-                />
-              </div>
+  <div class="form-container">
+    <div class="form-card">
+      <div class="card-body">
+        <form @submit.prevent="handleSubmit">
+          <div class="form-row">
+            <div class="form-col">
+              <BaseInput
+                ref="lastNameInput"
+                v-model="formData.lastName"
+                label="お名前（姓）"
+                placeholder="山田"
+                :required="true"
+                :rules="[rules.required]"
+              />
             </div>
-          </v-col>
 
-          <!-- 撮影日時選択 -->
-          <v-col cols="12">
-            <SlotPicker
-              v-model="formData.selectedSlot"
-              :menu="formData.menu"
-            />
-          </v-col>
-        </v-row>
-      </v-form>
-    </v-card-text>
+            <div class="form-col">
+              <BaseInput
+                ref="firstNameInput"
+                v-model="formData.firstName"
+                label="お名前（名）"
+                placeholder="太郎"
+                :required="true"
+                :rules="[rules.required]"
+              />
+            </div>
+          </div>
 
-    <v-card-actions
-      :style="{
-        padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl} ${designTokens.spacing['2xl']}`,
-        gap: designTokens.spacing.md,
-      }"
-    >
-      <v-spacer></v-spacer>
-      <v-btn
-        variant="outlined"
-        @click="handleReset"
-        :disabled="submitting"
-        :style="{
-          color: designTokens.colors.text.secondary,
-          borderColor: designTokens.colors.border.medium,
-          padding: `${designTokens.spacing.md} ${designTokens.spacing.xl}`,
-          fontSize: designTokens.typography.fontSize.base,
-          fontWeight: designTokens.typography.fontWeight.medium,
-          borderRadius: designTokens.borderRadius.md,
-        }"
-      >
-        クリア
-      </v-btn>
-      <v-btn
-        color="primary"
-        variant="elevated"
-        :disabled="!valid || !formData.selectedSlot || submitting"
-        :loading="submitting"
-        @click="handleSubmit"
-        :style="{
-          backgroundColor: designTokens.colors.accent.primary,
-          color: designTokens.colors.background.card,
-          padding: `${designTokens.spacing.md} ${designTokens.spacing['2xl']}`,
-          fontSize: designTokens.typography.fontSize.base,
-          fontWeight: designTokens.typography.fontWeight.semibold,
-          borderRadius: designTokens.borderRadius.md,
-          boxShadow: designTokens.shadows.sm,
-        }"
-      >
-        送信する
-      </v-btn>
-    </v-card-actions>
+          <BaseInput
+            ref="emailInput"
+            v-model="formData.email"
+            label="メールアドレス"
+            type="email"
+            placeholder="example@example.com"
+            :required="true"
+            :rules="[rules.required, rules.email]"
+          />
+
+          <BaseInput
+            ref="phoneInput"
+            v-model="formData.phone"
+            label="電話番号"
+            type="tel"
+            placeholder="090-1234-5678"
+            :required="true"
+            :rules="[rules.required, rules.phone]"
+          />
+
+          <div class="menu-section">
+            <label class="menu-label">撮影メニュー <span class="required">*</span></label>
+            <div class="menu-grid">
+              <MenuCard
+                v-for="menu in menuOptions"
+                :key="menu.value"
+                :menu="menu"
+                :selected-menu="formData.menu"
+                @show-detail="detailMenu = menu"
+              />
+            </div>
+          </div>
+
+          <SlotPicker
+            v-model="formData.selectedSlot"
+            :menu="formData.menu"
+          />
+
+          <div class="form-actions">
+            <BaseButton
+              variant="outlined"
+              @click="handleReset"
+              :disabled="submitting"
+            >
+              クリア
+            </BaseButton>
+            <BaseButton
+              type="submit"
+              variant="primary"
+              :disabled="!isFormValid || submitting"
+              :loading="submitting"
+            >
+              送信する
+            </BaseButton>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Menu Detail Modal -->
+    <MenuDetailModal
+      :menu="detailMenu"
+      :selected-menu="formData.menu"
+      @select="formData.menu = $event"
+      @close="detailMenu = null"
+    />
 
     <!-- Success/Error Dialog -->
-    <v-dialog v-model="showDialog" max-width="500">
-      <v-card
-        :style="{
-          boxShadow: designTokens.shadows.lg,
-          borderRadius: designTokens.borderRadius.lg,
-        }"
-      >
-        <v-card-title
-          :style="{
-            backgroundColor: dialogType === 'success' ? designTokens.colors.status.success : designTokens.colors.status.error,
-            color: designTokens.colors.background.card,
-            fontSize: designTokens.typography.fontSize.xl,
-            fontWeight: designTokens.typography.fontWeight.semibold,
-            padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
-          }"
-        >
-          {{ dialogType === 'success' ? '予約完了' : 'エラー' }}
-        </v-card-title>
-        <v-card-text
-          :style="{
-            padding: `${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
-            color: designTokens.colors.text.primary,
-            fontSize: designTokens.typography.fontSize.base,
-            lineHeight: designTokens.typography.lineHeight.relaxed,
-          }"
-        >
-          {{ dialogMessage }}
-        </v-card-text>
-        <v-card-actions
-          :style="{
-            padding: `${designTokens.spacing.md} ${designTokens.spacing.xl} ${designTokens.spacing.xl}`,
-          }"
-        >
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            @click="showDialog = false"
-            :style="{
-              backgroundColor: designTokens.colors.accent.primary,
-              color: designTokens.colors.background.card,
-              padding: `${designTokens.spacing.md} ${designTokens.spacing.xl}`,
-              borderRadius: designTokens.borderRadius.md,
-            }"
-          >
-            閉じる
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-card>
+    <Teleport to="body">
+      <div v-if="showDialog" class="dialog-overlay" @click="showDialog = false">
+        <div class="dialog-content" @click.stop>
+          <div class="dialog-header" :class="dialogType === 'success' ? 'success' : 'error'">
+            <h3>{{ dialogType === 'success' ? '予約完了' : 'エラー' }}</h3>
+          </div>
+          <div class="dialog-body">
+            <p>{{ dialogMessage }}</p>
+          </div>
+          <div class="dialog-actions">
+            <BaseButton variant="primary" @click="showDialog = false">
+              閉じる
+            </BaseButton>
+          </div>
+        </div>
+      </div>
+    </Teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import SlotPicker from './SlotPicker.vue'
+import { ref, reactive, computed } from 'vue'
+import BaseInput from './ui/BaseInput.vue'
+import BaseButton from './ui/BaseButton.vue'
 import MenuCard from './MenuCard.vue'
+import MenuDetailModal from './MenuDetailModal.vue'
+import SlotPicker from './SlotPicker.vue'
 import { createReservation, type Menu } from '../services/api'
 import { designTokens } from '../styles/designTokens'
-import { menuOptions } from '../data/menuData'
+import { menuOptions, type MenuOption } from '../data/menuData'
 
 interface FormData {
   lastName: string
@@ -186,15 +132,20 @@ interface FormData {
   email: string
   phone: string
   menu: Menu | ''
-  selectedSlot: string // ISO string
+  selectedSlot: string
 }
 
-const formRef = ref()
-const valid = ref(false)
+const detailMenu = ref<MenuOption | null>(null)
 const submitting = ref(false)
 const showDialog = ref(false)
 const dialogType = ref<'success' | 'error'>('success')
 const dialogMessage = ref('')
+
+// Input refs
+const lastNameInput = ref()
+const firstNameInput = ref()
+const emailInput = ref()
+const phoneInput = ref()
 
 const formData = reactive<FormData>({
   lastName: '',
@@ -211,11 +162,27 @@ const rules = {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return pattern.test(value) || '正しいメールアドレスを入力してください'
   },
+  phone: (value: string) => {
+    const pattern = /^[0-9\-]{10,14}$/
+    return pattern.test(value) || '正しい電話番号を入力してください'
+  },
 }
 
+const isFormValid = computed(() => {
+  return (
+    formData.lastName &&
+    formData.firstName &&
+    formData.email &&
+    formData.phone &&
+    formData.menu &&
+    formData.selectedSlot &&
+    rules.email(formData.email) === true &&
+    rules.phone(formData.phone) === true
+  )
+})
+
 const handleSubmit = async () => {
-  const { valid: isValid } = await formRef.value.validate()
-  if (!isValid || !formData.selectedSlot || !formData.menu) {
+  if (!isFormValid.value) {
     return
   }
 
@@ -236,7 +203,6 @@ const handleSubmit = async () => {
       dialogMessage.value = 'ご予約ありがとうございます！確認メールをお送りいたしました。'
       showDialog.value = true
 
-      // Reset form after successful submission
       setTimeout(() => {
         handleReset()
       }, 2000)
@@ -265,64 +231,65 @@ const getErrorMessage = (errorCode?: string, message?: string): string => {
 }
 
 const handleReset = () => {
-  formRef.value.reset()
   Object.assign(formData, {
     lastName: '',
     firstName: '',
     email: '',
+    phone: '',
     menu: '',
     selectedSlot: '',
   })
+
+  // バリデーションエラーもクリア
+  lastNameInput.value?.clearError()
+  firstNameInput.value?.clearError()
+  emailInput.value?.clearError()
+  phoneInput.value?.clearError()
 }
 </script>
 
 <style scoped>
-/* Custom styling for form inputs */
-:deep(.v-field__outline) {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.form-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-:deep(.v-field--focused .v-field__outline) {
-  border-width: 2px;
+.form-card {
+  background-color: v-bind('designTokens.colors.background.card');
+  border: 1px solid v-bind('designTokens.colors.border.light');
+  border-radius: v-bind('designTokens.borderRadius.sm');
+  box-shadow: v-bind('designTokens.shadows.lg');
+  overflow: hidden;
 }
 
-:deep(.v-input) {
-  margin-bottom: 0.5rem;
+.card-body {
+  padding: v-bind('designTokens.spacing["3xl"]') v-bind('designTokens.spacing["2xl"]');
 }
 
-:deep(.v-label) {
-  font-weight: 500;
-  letter-spacing: 0.02em;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: v-bind('designTokens.spacing.lg');
+  margin-bottom: 0;
 }
 
-/* Vuetifyフィールドのボーダー色を統一 */
-:deep(.v-field__outline__start),
-:deep(.v-field__outline__end) {
-  border-color: v-bind('designTokens.colors.accent.secondary') !important;
-  border-width: 2px !important;
-}
-
-:deep(.v-field--variant-outlined:hover .v-field__outline__start),
-:deep(.v-field--variant-outlined:hover .v-field__outline__end) {
-  border-color: v-bind('designTokens.colors.accent.primary') !important;
-}
-
-:deep(.v-field--focused .v-field__outline__start),
-:deep(.v-field--focused .v-field__outline__end) {
-  border-color: v-bind('designTokens.colors.accent.primary') !important;
+.form-col {
+  min-width: 0;
 }
 
 .menu-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: v-bind('designTokens.spacing.xl');
 }
 
 .menu-label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: v-bind('designTokens.colors.text.primary');
-  margin-bottom: 1rem;
-  letter-spacing: 0.02em;
+  font-size: v-bind('designTokens.typography.fontSize.xs');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+  color: v-bind('designTokens.colors.text.secondary');
+  margin-bottom: v-bind('designTokens.spacing.md');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+  text-transform: uppercase;
 }
 
 .menu-label .required {
@@ -331,7 +298,101 @@ const handleReset = () => {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: v-bind('designTokens.spacing.lg');
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: v-bind('designTokens.spacing.md');
+  margin-top: v-bind('designTokens.spacing.xl');
+  padding-top: v-bind('designTokens.spacing.xl');
+  border-top: 1px solid v-bind('designTokens.colors.border.light');
+}
+
+/* Dialog Styles */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: v-bind('designTokens.spacing.lg');
+}
+
+.dialog-content {
+  background-color: v-bind('designTokens.colors.background.card');
+  border-radius: v-bind('designTokens.borderRadius.sm');
+  box-shadow: v-bind('designTokens.shadows.xl');
+  max-width: 480px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.dialog-header {
+  padding: v-bind('designTokens.spacing.xl');
+  color: v-bind('designTokens.colors.background.card');
+}
+
+.dialog-header.success {
+  background-color: v-bind('designTokens.colors.status.success');
+}
+
+.dialog-header.error {
+  background-color: v-bind('designTokens.colors.status.error');
+}
+
+.dialog-header h3 {
+  margin: 0;
+  font-family: v-bind('designTokens.typography.fontFamily.secondary');
+  font-size: v-bind('designTokens.typography.fontSize.xl');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+}
+
+.dialog-body {
+  padding: v-bind('designTokens.spacing.xl');
+  color: v-bind('designTokens.colors.text.primary');
+  line-height: v-bind('designTokens.typography.lineHeight.relaxed');
+}
+
+.dialog-body p {
+  margin: 0;
+  font-size: v-bind('designTokens.typography.fontSize.base');
+}
+
+.dialog-actions {
+  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.xl');
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-body {
+    padding: v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.lg');
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
 }
 </style>
