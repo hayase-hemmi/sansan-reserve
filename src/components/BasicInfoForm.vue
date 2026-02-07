@@ -2,7 +2,7 @@
   <div class="form-container">
     <div class="form-card">
       <div class="card-body">
-        <form @submit.prevent="handleSubmit">
+        <form v-if="step === 1" @submit.prevent="handleSubmit">
           <div class="form-row">
             <div class="form-col">
               <BaseInput
@@ -103,10 +103,74 @@
               :disabled="!isFormValid || submitting"
               :loading="submitting"
             >
-              送信する
+              入力内容を確認する
             </BaseButton>
           </div>
         </form>
+
+        <!-- STEP 2: Confirmation -->
+        <div v-else class="confirmation">
+          <h2 class="confirmation-title">ご予約内容の確認</h2>
+          <p class="confirmation-subtitle">以下の内容でよろしければ「予約を確定する」ボタンを押してください。</p>
+
+          <dl class="confirmation-list">
+            <div class="confirmation-item">
+              <dt class="confirmation-label">お名前</dt>
+              <dd class="confirmation-value">{{ formData.lastName }} {{ formData.firstName }}</dd>
+            </div>
+
+            <div class="confirmation-item">
+              <dt class="confirmation-label">メールアドレス</dt>
+              <dd class="confirmation-value">{{ formData.email }}</dd>
+            </div>
+
+            <div class="confirmation-item">
+              <dt class="confirmation-label">電話番号</dt>
+              <dd class="confirmation-value">{{ formData.phone }}</dd>
+            </div>
+
+            <div class="confirmation-item">
+              <dt class="confirmation-label">ご来店人数</dt>
+              <dd class="confirmation-value">{{ guestCountDisplay }}</dd>
+            </div>
+
+            <div class="confirmation-item">
+              <dt class="confirmation-label">ペット同伴</dt>
+              <dd class="confirmation-value">{{ hasPetDisplay }}</dd>
+            </div>
+
+            <div class="confirmation-item">
+              <dt class="confirmation-label">撮影メニュー</dt>
+              <dd class="confirmation-value">
+                <span class="confirmation-menu-title">{{ selectedMenuOption?.title }}</span>
+                <span class="confirmation-menu-meta">{{ selectedMenuOption?.price }} / 約{{ selectedMenuOption?.duration }}分</span>
+              </dd>
+            </div>
+
+            <div class="confirmation-item">
+              <dt class="confirmation-label">予約日時</dt>
+              <dd class="confirmation-value">{{ formatSelectedDateTime }}</dd>
+            </div>
+          </dl>
+
+          <div class="form-actions">
+            <BaseButton
+              variant="outlined"
+              @click="goBack"
+              :disabled="submitting"
+            >
+              戻る
+            </BaseButton>
+            <BaseButton
+              variant="primary"
+              @click="handleSubmit"
+              :disabled="submitting"
+              :loading="submitting"
+            >
+              予約を確定する
+            </BaseButton>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -174,6 +238,7 @@ const petOptions = [
   { value: 'yes', title: 'あり' },
 ]
 
+const step = ref<1 | 2>(1)
 const detailMenu = ref<MenuOption | null>(null)
 const submitting = ref(false)
 const showDialog = ref(false)
@@ -211,6 +276,34 @@ const rules = {
   },
 }
 
+const formatSelectedDateTime = computed(() => {
+  if (!formData.selectedSlot) return ''
+  const date = new Date(formData.selectedSlot)
+  const dayNames = ['日', '月', '火', '水', '木', '金', '土']
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const dayOfWeek = dayNames[date.getDay()]
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${year}年${month}月${day}日（${dayOfWeek}）${hours}:${minutes}`
+})
+
+const selectedMenuOption = computed(() => {
+  if (!formData.menu) return null
+  return menuOptions.find(m => m.value === formData.menu) || null
+})
+
+const guestCountDisplay = computed(() => {
+  const option = guestCountOptions.find(o => o.value === formData.guestCount)
+  return option?.title || ''
+})
+
+const hasPetDisplay = computed(() => {
+  const option = petOptions.find(o => o.value === formData.hasPet)
+  return option?.title || ''
+})
+
 const isFormValid = computed(() => {
   return (
     formData.lastName &&
@@ -228,6 +321,12 @@ const isFormValid = computed(() => {
 
 const handleSubmit = async () => {
   if (!isFormValid.value) {
+    return
+  }
+
+  if (step.value === 1) {
+    step.value = 2
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     return
   }
 
@@ -277,7 +376,12 @@ const getErrorMessage = (errorCode?: string, message?: string): string => {
   return message || '予約の処理中にエラーが発生しました。'
 }
 
+const goBack = () => {
+  step.value = 1
+}
+
 const handleReset = () => {
+  step.value = 1
   Object.assign(formData, {
     lastName: '',
     firstName: '',
@@ -429,6 +533,72 @@ const handleReset = () => {
   justify-content: flex-end;
 }
 
+/* Confirmation Screen */
+.confirmation-title {
+  font-family: v-bind('designTokens.typography.fontFamily.secondary');
+  font-size: v-bind('designTokens.typography.fontSize.xl');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
+  color: v-bind('designTokens.colors.text.primary');
+  margin: 0 0 v-bind('designTokens.spacing.sm') 0;
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+}
+
+.confirmation-subtitle {
+  font-size: v-bind('designTokens.typography.fontSize.sm');
+  color: v-bind('designTokens.colors.text.secondary');
+  margin: 0 0 v-bind('designTokens.spacing.xl') 0;
+  line-height: v-bind('designTokens.typography.lineHeight.relaxed');
+}
+
+.confirmation-list {
+  margin: 0;
+  padding: 0;
+}
+
+.confirmation-item {
+  display: flex;
+  align-items: baseline;
+  padding: v-bind('designTokens.spacing.md') 0;
+  border-bottom: 1px solid v-bind('designTokens.colors.border.light');
+}
+
+.confirmation-item:first-child {
+  border-top: 1px solid v-bind('designTokens.colors.border.light');
+}
+
+.confirmation-label {
+  font-size: v-bind('designTokens.typography.fontSize.xs');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+  color: v-bind('designTokens.colors.text.secondary');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.confirmation-value {
+  font-size: v-bind('designTokens.typography.fontSize.base');
+  color: v-bind('designTokens.colors.text.primary');
+  margin: 0;
+  line-height: v-bind('designTokens.typography.lineHeight.normal');
+}
+
+.confirmation-menu-title {
+  display: block;
+  font-family: v-bind('designTokens.typography.fontFamily.secondary');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
+}
+
+.confirmation-menu-meta {
+  display: block;
+  font-size: v-bind('designTokens.typography.fontSize.sm');
+  color: v-bind('designTokens.colors.accent.primary');
+  margin-top: v-bind('designTokens.spacing.xs');
+}
+
+.confirmation .form-actions {
+  border-top: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .card-body {
@@ -449,6 +619,15 @@ const handleReset = () => {
 
   .form-actions button {
     width: 100%;
+  }
+
+  .confirmation-item {
+    flex-direction: column;
+    gap: v-bind('designTokens.spacing.xs');
+  }
+
+  .confirmation-label {
+    min-width: unset;
   }
 }
 </style>
