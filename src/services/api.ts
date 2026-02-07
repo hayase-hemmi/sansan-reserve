@@ -18,6 +18,8 @@ export interface ReserveRequest {
   firstName: string
   email: string
   phone: string
+  guestCount: number
+  hasPet: boolean
   menu: Menu
   start: string // ISO string
 }

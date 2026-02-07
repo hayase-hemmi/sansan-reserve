@@ -50,6 +50,9 @@ interface ReserveRequest {
   lastName: string
   firstName: string
   email: string
+  phone: string
+  guestCount: number
+  hasPet: boolean
   menu: Menu
   start: string
 }
@@ -225,6 +228,9 @@ function createReservationEvent(
   lastName: string,
   firstName: string,
   email: string,
+  phone: string,
+  guestCount: number,
+  hasPet: boolean,
   menu: Menu,
   start: Date
 ): string {
@@ -241,6 +247,9 @@ function createReservationEvent(
 予約情報:
 - お名前: ${lastName} ${firstName}
 - メール: ${email}
+- 電話番号: ${phone}
+- ご来店人数: ${guestCount}人
+- ペット同伴: ${hasPet ? 'あり' : 'なし'}
 - メニュー: ${menuConfig.displayName}
 - 時間: ${menuConfig.duration}分
 - 予約日時: ${new Date().toISOString()}
@@ -372,6 +381,9 @@ function handleReserve(
       body.lastName,
       body.firstName,
       body.email,
+      body.phone || '',
+      body.guestCount || 1,
+      body.hasPet || false,
       body.menu,
       start
     )

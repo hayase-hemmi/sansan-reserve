@@ -169,6 +169,9 @@ function handleReserve(
       body.lastName,
       body.firstName,
       body.email,
+      body.phone || '',
+      body.guestCount || 1,
+      body.hasPet || false,
       body.menu,
       start
     )

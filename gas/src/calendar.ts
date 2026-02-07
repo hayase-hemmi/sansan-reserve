@@ -124,6 +124,9 @@ export function createReservationEvent(
   lastName: string,
   firstName: string,
   email: string,
+  phone: string,
+  guestCount: number,
+  hasPet: boolean,
   menu: Menu,
   start: Date
 ): string {
@@ -141,6 +144,9 @@ export function createReservationEvent(
 予約情報:
 - お名前: ${lastName} ${firstName}
 - メール: ${email}
+- 電話番号: ${phone}
+- ご来店人数: ${guestCount}人
+- ペット同伴: ${hasPet ? 'あり' : 'なし'}
 - メニュー: ${menuConfig.displayName}
 - 時間: ${menuConfig.duration}分
 - 予約日時: ${new Date().toISOString()}
@@ -149,7 +155,7 @@ export function createReservationEvent(
   const event = calendar.createEvent(title, start, end, {
     description,
     guests: email,
-    sendInvites: false, // Change to true if you want to send email invitations
+    sendInvites: false,
   })
 
   return event.getId()

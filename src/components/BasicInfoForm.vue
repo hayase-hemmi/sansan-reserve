@@ -47,6 +47,30 @@
             :rules="[rules.required, rules.phone]"
           />
 
+          <div class="form-row">
+            <div class="form-col">
+              <BaseSelect
+                ref="guestCountSelect"
+                v-model="formData.guestCount"
+                label="ご来店人数"
+                :options="guestCountOptions"
+                :required="true"
+                :rules="[rules.required]"
+              />
+            </div>
+
+            <div class="form-col">
+              <BaseSelect
+                ref="hasPetSelect"
+                v-model="formData.hasPet"
+                label="ペット同伴"
+                :options="petOptions"
+                :required="true"
+                :rules="[rules.required]"
+              />
+            </div>
+          </div>
+
           <div class="menu-section">
             <label class="menu-label">撮影メニュー <span class="required">*</span></label>
             <div class="menu-grid">
@@ -118,6 +142,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import BaseInput from './ui/BaseInput.vue'
+import BaseSelect from './ui/BaseSelect.vue'
 import BaseButton from './ui/BaseButton.vue'
 import MenuCard from './MenuCard.vue'
 import MenuDetailModal from './MenuDetailModal.vue'
@@ -131,9 +156,23 @@ interface FormData {
   firstName: string
   email: string
   phone: string
+  guestCount: string
+  hasPet: string
   menu: Menu | ''
   selectedSlot: string
 }
+
+const guestCountOptions = [
+  { value: '1', title: '1人' },
+  { value: '2', title: '2人' },
+  { value: '3', title: '3人' },
+  { value: '4', title: '4人' },
+]
+
+const petOptions = [
+  { value: 'no', title: 'なし' },
+  { value: 'yes', title: 'あり' },
+]
 
 const detailMenu = ref<MenuOption | null>(null)
 const submitting = ref(false)
@@ -146,12 +185,16 @@ const lastNameInput = ref()
 const firstNameInput = ref()
 const emailInput = ref()
 const phoneInput = ref()
+const guestCountSelect = ref()
+const hasPetSelect = ref()
 
 const formData = reactive<FormData>({
   lastName: '',
   firstName: '',
   email: '',
   phone: '',
+  guestCount: '',
+  hasPet: '',
   menu: '',
   selectedSlot: '',
 })
@@ -174,6 +217,8 @@ const isFormValid = computed(() => {
     formData.firstName &&
     formData.email &&
     formData.phone &&
+    formData.guestCount &&
+    formData.hasPet &&
     formData.menu &&
     formData.selectedSlot &&
     rules.email(formData.email) === true &&
@@ -194,6 +239,8 @@ const handleSubmit = async () => {
       firstName: formData.firstName,
       email: formData.email,
       phone: formData.phone,
+      guestCount: parseInt(formData.guestCount, 10),
+      hasPet: formData.hasPet === 'yes',
       menu: formData.menu as Menu,
       start: formData.selectedSlot,
     })
@@ -236,6 +283,8 @@ const handleReset = () => {
     firstName: '',
     email: '',
     phone: '',
+    guestCount: '',
+    hasPet: '',
     menu: '',
     selectedSlot: '',
   })
@@ -245,6 +294,8 @@ const handleReset = () => {
   firstNameInput.value?.clearError()
   emailInput.value?.clearError()
   phoneInput.value?.clearError()
+  guestCountSelect.value?.clearError()
+  hasPetSelect.value?.clearError()
 }
 </script>
 
@@ -271,11 +322,16 @@ const handleReset = () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: v-bind('designTokens.spacing.lg');
-  margin-bottom: 0;
+  margin-bottom: v-bind('designTokens.spacing.lg');
 }
 
 .form-col {
   min-width: 0;
+}
+
+.form-col :deep(.input-wrapper),
+.form-col :deep(.select-wrapper) {
+  margin-bottom: 0;
 }
 
 .menu-section {
