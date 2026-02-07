@@ -184,6 +184,7 @@ interface FormData {
   lastName: string
   firstName: string
   email: string
+  phone: string
   menu: Menu | ''
   selectedSlot: string // ISO string
 }
@@ -199,6 +200,7 @@ const formData = reactive<FormData>({
   lastName: '',
   firstName: '',
   email: '',
+  phone: '',
   menu: '',
   selectedSlot: '',
 })
@@ -224,6 +226,7 @@ const handleSubmit = async () => {
       lastName: formData.lastName,
       firstName: formData.firstName,
       email: formData.email,
+      phone: formData.phone,
       menu: formData.menu as Menu,
       start: formData.selectedSlot,
     })

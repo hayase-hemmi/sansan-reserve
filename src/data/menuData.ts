@@ -1,4 +1,4 @@
-import type { Menu } from '../services/api'
+import { type Menu, MENU_CONFIG } from '../shared/menuConfig'
 
 export type ContentItemType = 'text' | 'bullet' | 'note' | 'sub-item' | 'example-ok' | 'example-ng'
 
@@ -28,7 +28,7 @@ export const menuOptions: MenuOption[] = [
     value: 'standard',
     title: '15分撮影プラン',
     description: 'お手軽にセルフフォト撮影を楽しめる基本プラン',
-    duration: 30,
+    duration: MENU_CONFIG.standard.duration,
     price: '¥3,000',
     priceNote: '2人まで / 3人目以降 +¥1,000',
     capacity: '定員4人まで（ペット除く）',
@@ -94,7 +94,7 @@ export const menuOptions: MenuOption[] = [
     value: 'premium',
     title: '30分撮影プラン',
     description: 'たっぷり撮影できるゆとりのプラン',
-    duration: 60,
+    duration: MENU_CONFIG.premium.duration,
     price: '¥5,000',
     priceNote: '2人まで / 3人目以降 +¥1,500',
     capacity: '定員4人まで（ペット除く）',
@@ -160,7 +160,7 @@ export const menuOptions: MenuOption[] = [
     value: 'family',
     title: '七五三 3歳女の子プラン',
     description: '衣装レンタル・着付け込みの七五三撮影',
-    duration: 120,
+    duration: MENU_CONFIG.family.duration,
     price: '¥10,000',
     priceNote: '補助2人まで / 写真に写る場合 +¥1,500',
     sections: [
@@ -209,7 +209,7 @@ export const menuOptions: MenuOption[] = [
     value: 'wedding',
     title: '七五三 5歳男の子プラン',
     description: '衣装レンタル・着付け込みの七五三撮影',
-    duration: 120,
+    duration: MENU_CONFIG.wedding.duration,
     price: '¥10,000',
     priceNote: '補助2人まで / 写真に写る場合 +¥1,500',
     sections: [

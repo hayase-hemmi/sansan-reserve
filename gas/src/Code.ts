@@ -9,11 +9,12 @@ interface MenuConfig {
   displayName: string
 }
 
+// IMPORTANT: これらの値は src/shared/menuConfig.ts と一致させること（テストで自動検証）
 const MENU_CONFIG: Record<Menu, MenuConfig> = {
-  standard: { duration: 30, displayName: 'スタンダードプラン' },
-  premium: { duration: 60, displayName: 'プレミアムプラン' },
-  family: { duration: 90, displayName: 'ファミリープラン' },
-  wedding: { duration: 120, displayName: 'ウェディングプラン' },
+  standard: { duration: 30, displayName: '15分撮影プラン' },
+  premium: { duration: 60, displayName: '30分撮影プラン' },
+  family: { duration: 120, displayName: '七五三 3歳女の子プラン' },
+  wedding: { duration: 120, displayName: '七五三 5歳男の子プラン' },
 }
 
 interface BusinessHours {

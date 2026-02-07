@@ -1,5 +1,6 @@
-// API types (matching GAS backend)
-export type Menu = 'standard' | 'premium' | 'family' | 'wedding'
+// Menu type and duration are defined in the shared config (single source of truth)
+import { type Menu, getMenuDuration } from '../shared/menuConfig'
+export { type Menu, getMenuDuration }
 
 export interface TimeSlot {
   start: string // ISO string
@@ -97,19 +98,6 @@ export async function createReservation(
   }
 
   return data
-}
-
-/**
- * Get menu duration in minutes
- */
-export function getMenuDuration(menu: Menu): number {
-  const durations: Record<Menu, number> = {
-    standard: 30,
-    premium: 60,
-    family: 120,
-    wedding: 120,
-  }
-  return durations[menu]
 }
 
 /**
