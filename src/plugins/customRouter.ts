@@ -13,16 +13,6 @@ const router = createRouter({
       name: 'demo-form',
       component: CustomHome,
     },
-    {
-      path: '/demo/components',
-      name: 'demo-components',
-      component: () => import('../views/DemoComponents.vue'),
-    },
-    {
-      path: '/demo/design-tokens',
-      name: 'demo-design-tokens',
-      component: () => import('../views/DemoDesignTokens.vue'),
-    },
   ],
 })
 

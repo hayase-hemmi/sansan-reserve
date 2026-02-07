@@ -13,17 +13,6 @@ import { designTokens } from './styles/designTokens'
             class="logo-img"
           />
         </router-link>
-        <nav class="header-nav">
-          <router-link to="/demo/form" class="nav-link">
-            予約フォーム
-          </router-link>
-          <router-link to="/demo/components" class="nav-link">
-            コンポーネント
-          </router-link>
-          <router-link to="/demo/design-tokens" class="nav-link">
-            デザイン
-          </router-link>
-        </nav>
       </div>
     </header>
 
@@ -55,8 +44,6 @@ import { designTokens } from './styles/designTokens'
   padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.xl');
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: v-bind('designTokens.spacing.xl');
 }
 
 .logo-link {
@@ -77,34 +64,6 @@ import { designTokens } from './styles/designTokens'
   opacity: 0.8;
 }
 
-.header-nav {
-  display: flex;
-  gap: v-bind('designTokens.spacing.lg');
-  align-items: center;
-}
-
-.nav-link {
-  font-family: v-bind('designTokens.typography.fontFamily.navigation');
-  font-size: v-bind('designTokens.typography.fontSize.sm');
-  font-weight: v-bind('designTokens.typography.fontWeight.regular');
-  color: v-bind('designTokens.colors.text.secondary');
-  text-decoration: none;
-  padding: v-bind('designTokens.spacing.sm') v-bind('designTokens.spacing.md');
-  border-radius: v-bind('designTokens.borderRadius.md');
-  transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
-  white-space: nowrap;
-}
-
-.nav-link:hover {
-  color: v-bind('designTokens.colors.accent.primary');
-  background-color: v-bind('designTokens.colors.accent.hover');
-}
-
-.nav-link.router-link-active {
-  color: v-bind('designTokens.colors.accent.primary');
-  background-color: v-bind('designTokens.colors.accent.secondary');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
-}
 
 .app-main {
   min-height: calc(100vh - 73px);
@@ -113,24 +72,10 @@ import { designTokens } from './styles/designTokens'
 @media (max-width: 768px) {
   .header-content {
     padding: v-bind('designTokens.spacing.sm') v-bind('designTokens.spacing.lg');
-    flex-direction: column;
-    align-items: flex-start;
-    gap: v-bind('designTokens.spacing.md');
   }
 
   .logo-img {
     height: 40px;
-  }
-
-  .header-nav {
-    width: 100%;
-    justify-content: space-between;
-    gap: v-bind('designTokens.spacing.sm');
-  }
-
-  .nav-link {
-    font-size: v-bind('designTokens.typography.fontSize.xs');
-    padding: v-bind('designTokens.spacing.xs') v-bind('designTokens.spacing.sm');
   }
 }
 </style>
