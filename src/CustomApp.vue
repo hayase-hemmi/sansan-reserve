@@ -31,7 +31,7 @@ import { designTokens } from './styles/designTokens'
 
 .app-header {
   background-color: v-bind('designTokens.colors.background.card');
-  border-bottom: 1px solid v-bind('designTokens.colors.border.light');
+  border-bottom: none;
   position: sticky;
   top: 0;
   z-index: 100;
