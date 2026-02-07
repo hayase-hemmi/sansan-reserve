@@ -25,7 +25,7 @@ import { designTokens } from './styles/designTokens'
 <style scoped>
 .app-wrapper {
   min-height: 100vh;
-  background-color: v-bind('designTokens.colors.background.main');
+  background-color: v-bind('designTokens.colors.background.card');
   font-family: v-bind('designTokens.typography.fontFamily.primary');
 }
 
