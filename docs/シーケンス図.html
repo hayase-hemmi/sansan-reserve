@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sansan Reserve - シーケンス図</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      background: #f5f7fa;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #1a2a3a;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      color: #6b7c8d;
+      margin-bottom: 40px;
+    }
+    .diagram-section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    .diagram-section h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #1a2a3a;
+    }
+    .diagram-section .desc {
+      font-size: 0.85rem;
+      color: #8a9bac;
+      margin-bottom: 24px;
+    }
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .legend-item {
+      background: #f8fafc;
+      border: 1px solid #e8edf2;
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .legend-item h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4a5b6c;
+      margin-bottom: 6px;
+    }
+    .legend-item p {
+      font-size: 0.8rem;
+      color: #7a8b9c;
+    }
+    .legend-item code {
+      background: #eef2f7;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #3a6b9f;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #aab5c0;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sansan Reserve System</h1>
+    <p class="subtitle">予約システム シーケンス図</p>
+
+    <!-- UC-1 + UC-2: メニュー選択 + 空き枠確認 -->
+    <div class="diagram-section">
+      <h2>1. メニュー選択 &amp; 空き枠確認</h2>
+      <p class="desc">ユーザーがメニューと日付を選択し、空き枠を取得するまでの流れ</p>
+      <pre class="mermaid">
+sequenceDiagram
+    actor User as お客様
+    participant FE as フロントエンド<br/>(Vue 3)
+    participant API as api.ts
+    participant Config as menuConfig.ts<br/>(設定)
+    participant GAS as GAS バックエンド<br/>(Code.ts)
+    participant GCal as Google Calendar
+
+    User->>FE: メニューカードをタップ
+    FE->>FE: MenuDetailModal 表示
+    User->>FE: 「このプランを選ぶ」
+
+    Note over FE: formData.menu = 選択メニュー
+
+    User->>FE: 撮影希望日を選択
+
+    FE->>Config: getMenuDuration(menu)
+    Config-->>FE: duration (例: 120分)
+
+    FE->>API: getAvailability(from, to, durationMin)
+    API->>GAS: GET ?path=/availability<br/>&from=...&to=...&durationMin=120
+
+    GAS->>GCal: getEvents(from, to)
+    GCal-->>GAS: 既存イベント一覧
+
+    Note over GAS: busyPeriods を抽出<br/>営業時間 9:00-18:00 で<br/>30分刻みスロット生成<br/>isSlotBusy() で重複判定
+
+    GAS-->>API: { slots: [...] }
+    API-->>FE: TimeSlot[]
+
+    FE->>FE: スロット一覧を描画<br/>(available / 予約済)
+    User->>FE: 空き時間枠を選択
+    Note over FE: formData.selectedSlot = ISO文字列
+      </pre>
+    </div>
+
+    <!-- UC-3: 予約確定 -->
+    <div class="diagram-section">
+      <h2>2. 予約確定</h2>
+      <p class="desc">ユーザーが情報を入力して予約を送信し、カレンダーにイベントが作成されるまでの流れ</p>
+      <pre class="mermaid">
+sequenceDiagram
+    actor User as お客様
+    participant FE as フロントエンド<br/>(Vue 3)
+    participant API as api.ts
+    participant GAS as GAS バックエンド<br/>(Code.ts)
+    participant GCal as Google Calendar
+
+    User->>FE: 氏名・メール・電話番号を入力
+    User->>FE: 「送信する」ボタン
+
+    FE->>FE: isFormValid チェック<br/>(氏名/メール/電話/メニュー/日時)
+
+    alt バリデーション失敗
+        FE-->>User: エラー表示
+    end
+
+    FE->>API: createReservation(request)
+    Note over API: token を自動付与<br/>(VITE_API_TOKEN)
+
+    API->>GAS: POST ?path=/reserve<br/>Content-Type: text/plain<br/>{ token, lastName, firstName,<br/>  email, phone, menu, start }
+
+    GAS->>GAS: validateToken(token)
+
+    alt トークン無効
+        GAS-->>API: { ok: false, errorCode: "INVALID_TOKEN" }
+        API-->>FE: エラーレスポンス
+        FE-->>User: エラーダイアログ
+    end
+
+    GAS->>GAS: MENU_CONFIG[menu] 参照<br/>duration, displayName 取得
+
+    GAS->>GCal: getEvents(start, end)
+    GCal-->>GAS: 既存イベント
+
+    GAS->>GAS: isSlotAvailable() で<br/>二重予約チェック
+
+    alt 枠が埋まっている
+        GAS-->>API: { ok: false, errorCode: "SLOT_TAKEN" }
+        API-->>FE: エラーレスポンス
+        FE-->>User: 「すでに予約済みです」
+    end
+
+    Note over GAS: end = start + duration分<br/>title = "Sansan Reserve: {displayName} {姓}{名}"
+
+    GAS->>GCal: createEvent(title, start, end,<br/>{ description, guests })
+    GCal-->>GAS: eventId
+
+    GAS-->>API: { ok: true, eventId }
+    API-->>FE: ReserveResponse
+
+    FE-->>User: 「ご予約ありがとうございます！」
+    FE->>FE: 2秒後にフォームリセット
+      </pre>
+    </div>
+
+    <!-- 全体構成 -->
+    <div class="diagram-section">
+      <h2>3. システム構成</h2>
+      <p class="desc">コンポーネントとデータの依存関係</p>
+      <pre class="mermaid">
+graph TB
+    subgraph Frontend ["フロントエンド (Vue 3 + Vite)"]
+        Home[CustomHome.vue]
+        Form[CustomBasicInfoForm.vue]
+        Slot[CustomSlotPicker.vue]
+        MenuCard[MenuCard.vue]
+        Modal[MenuDetailModal.vue]
+        APIService[api.ts]
+        MenuData[menuData.ts]
+
+        Home --> Form
+        Form --> MenuCard
+        Form --> Modal
+        Form --> Slot
+        Form --> APIService
+        Slot --> APIService
+        MenuCard --> MenuData
+        Modal --> MenuData
+    end
+
+    subgraph Shared ["共有設定 (Single Source of Truth)"]
+        Config[menuConfig.ts<br/>Menu型 / MENU_CONFIG / BusinessHours]
+        Logic[slotLogic.ts<br/>isSlotBusy / generateDaySlots]
+    end
+
+    subgraph GASBackend ["GAS バックエンド (clasp deploy)"]
+        CodeTS[Code.ts<br/>doGet / doPost]
+        Types[types.ts<br/>MENU_CONFIG ミラー]
+        Calendar[calendar.ts]
+        Auth[auth.ts]
+
+        CodeTS --> Calendar
+        CodeTS --> Auth
+        Calendar --> Types
+    end
+
+    subgraph Google ["Google Cloud"]
+        GCal[Google Calendar API]
+    end
+
+    APIService --> Config
+    MenuData --> Config
+    APIService -.->|HTTP GET/POST| CodeTS
+    Calendar -.->|CalendarApp| GCal
+
+    subgraph Tests ["自動テスト (vitest)"]
+        T1[menuConfig.test.ts]
+        T2[slotLogic.test.ts]
+        T3[menuData.test.ts]
+    end
+
+    T1 --> Config
+    T1 -.->|ファイル読み取りで整合性検証| Types
+    T2 --> Logic
+    T3 --> MenuData
+    T3 --> Config
+
+    style Config fill:#e8f4fd,stroke:#4a90d9
+    style Logic fill:#e8f4fd,stroke:#4a90d9
+    style Types fill:#fef3e2,stroke:#d4a03c
+    style GCal fill:#e8fde8,stroke:#4a9f4a
+      </pre>
+    </div>
+
+    <!-- 補足情報 -->
+    <div class="legend">
+      <div class="legend-item">
+        <h3>API エンドポイント</h3>
+        <p>
+          <code>GET ?path=/availability</code> 空き枠取得<br/>
+          <code>POST ?path=/reserve</code> 予約作成<br/>
+          CORS回避のため <code>Content-Type: text/plain</code> を使用
+        </p>
+      </div>
+      <div class="legend-item">
+        <h3>メニュー設定 (MENU_CONFIG)</h3>
+        <p>
+          standard: 30分 / premium: 60分<br/>
+          family: 120分 / wedding: 120分<br/>
+          <code>src/shared/menuConfig.ts</code> が正（テストで GAS 側と自動検証）
+        </p>
+      </div>
+      <div class="legend-item">
+        <h3>スロット生成アルゴリズム</h3>
+        <p>
+          営業時間 9:00-18:00、30分間隔<br/>
+          <code>start + duration &le; 18:00</code> のスロットのみ生成<br/>
+          <code>slotStart &lt; busy.end && slotEnd &gt; busy.start</code> で重複判定
+        </p>
+      </div>
+      <div class="legend-item">
+        <h3>認証</h3>
+        <p>
+          フロントエンドが <code>VITE_API_TOKEN</code> を付与<br/>
+          GAS 側で <code>ScriptProperties.API_TOKEN</code> と照合
+        </p>
+      </div>
+    </div>
+
+    <footer>Sansan Reserve &mdash; Photo Studio Sansan 予約システム</footer>
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'neutral',
+      sequence: {
+        actorMargin: 60,
+        noteMargin: 12,
+        messageFontSize: 13,
+        noteFontSize: 12,
+        wrap: true,
+        width: 200,
+      },
+      flowchart: {
+        nodeSpacing: 30,
+        rankSpacing: 40,
+        curve: 'basis',
+      },
+    });
+  </script>
+</body>
+</html>
