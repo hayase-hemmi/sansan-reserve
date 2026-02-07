@@ -45,7 +45,7 @@
                 :key="menu.value"
                 :menu="menu"
                 :selected-menu="formData.menu"
-                @select="formData.menu = menu.value"
+                @show-detail="detailMenu = menu"
               />
             </div>
           </div>
@@ -76,6 +76,14 @@
       </div>
     </div>
 
+    <!-- Menu Detail Modal -->
+    <MenuDetailModal
+      :menu="detailMenu"
+      :selected-menu="formData.menu"
+      @select="formData.menu = $event"
+      @close="detailMenu = null"
+    />
+
     <!-- Success/Error Dialog -->
     <Teleport to="body">
       <div v-if="showDialog" class="dialog-overlay" @click="showDialog = false">
@@ -102,10 +110,11 @@ import { ref, reactive, computed } from 'vue'
 import BaseInput from './ui/BaseInput.vue'
 import BaseButton from './ui/BaseButton.vue'
 import MenuCard from './MenuCard.vue'
+import MenuDetailModal from './MenuDetailModal.vue'
 import CustomSlotPicker from './CustomSlotPicker.vue'
 import { createReservation, type Menu } from '../services/api'
 import { designTokens } from '../styles/designTokens'
-import { menuOptions } from '../data/menuData'
+import { menuOptions, type MenuOption } from '../data/menuData'
 
 interface FormData {
   lastName: string
@@ -115,6 +124,7 @@ interface FormData {
   selectedSlot: string
 }
 
+const detailMenu = ref<MenuOption | null>(null)
 const submitting = ref(false)
 const showDialog = ref(false)
 const dialogType = ref<'success' | 'error'>('success')

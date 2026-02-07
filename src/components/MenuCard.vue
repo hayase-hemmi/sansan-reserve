@@ -2,43 +2,23 @@
   <div
     class="menu-card"
     :class="{ selected: isSelected }"
+    @click="$emit('showDetail')"
+    role="button"
+    tabindex="0"
+    @keypress.enter="$emit('showDetail')"
+    @keypress.space.prevent="$emit('showDetail')"
   >
-    <div class="menu-card-header">
+    <div class="menu-card-inner">
       <h3 class="menu-title">{{ menu.title }}</h3>
-      <div class="menu-price-block">
+      <div class="menu-info">
         <span class="menu-price">{{ menu.price }}</span>
-        <span v-if="menu.priceNote" class="menu-price-note">{{ menu.priceNote }}</span>
+        <span class="menu-separator">/</span>
+        <span class="menu-duration">約{{ menu.duration }}分</span>
       </div>
-    </div>
-
-    <div class="menu-card-body">
       <p class="menu-description">{{ menu.description }}</p>
-
-      <div class="menu-details">
-        <div class="menu-meta">
-          <span class="meta-label">所要時間</span>
-          <span class="meta-value">約{{ menu.duration }}分</span>
-        </div>
-        <div v-if="menu.capacity" class="menu-meta">
-          <span class="meta-label">定員</span>
-          <span class="meta-value">{{ menu.capacity }}</span>
-        </div>
-        <ul class="menu-includes">
-          <li v-for="(detail, i) in menu.details" :key="i">{{ detail }}</li>
-        </ul>
-      </div>
     </div>
-
-    <div class="menu-card-footer">
-      <button
-        type="button"
-        class="select-button"
-        :class="{ 'is-selected': isSelected }"
-        @click="$emit('select')"
-      >
-        {{ isSelected ? '選択中' : 'このメニューを選択' }}
-      </button>
-    </div>
+    <span class="detail-link">詳細を見る</span>
+    <div v-if="isSelected" class="selected-badge">選択中</div>
   </div>
 </template>
 
@@ -56,7 +36,7 @@ interface Props {
 const props = defineProps<Props>()
 
 defineEmits<{
-  select: []
+  showDetail: []
 }>()
 
 const isSelected = computed(() => props.selectedMenu === props.menu.value)
@@ -64,13 +44,16 @@ const isSelected = computed(() => props.selectedMenu === props.menu.value)
 
 <style scoped>
 .menu-card {
+  position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background-color: v-bind('designTokens.colors.background.card');
   border: 1px solid v-bind('designTokens.colors.border.medium');
   border-radius: v-bind('designTokens.borderRadius.sm');
+  padding: v-bind('designTokens.spacing.xl');
+  cursor: pointer;
   transition: border-color v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
-  overflow: hidden;
 }
 
 .menu-card:hover {
@@ -79,15 +62,16 @@ const isSelected = computed(() => props.selectedMenu === props.menu.value)
 
 .menu-card.selected {
   border-color: v-bind('designTokens.colors.accent.primary');
+  background-color: v-bind('designTokens.colors.accent.hover');
 }
 
-.menu-card-header {
-  padding: v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.md');
+.menu-card-inner {
+  flex: 1;
 }
 
 .menu-title {
   font-family: v-bind('designTokens.typography.fontFamily.secondary');
-  font-size: v-bind('designTokens.typography.fontSize.lg');
+  font-size: v-bind('designTokens.typography.fontSize.base');
   font-weight: v-bind('designTokens.typography.fontWeight.regular');
   color: v-bind('designTokens.colors.text.primary');
   margin: 0 0 v-bind('designTokens.spacing.sm') 0;
@@ -95,137 +79,65 @@ const isSelected = computed(() => props.selectedMenu === props.menu.value)
   letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
 }
 
-.menu-price-block {
+.menu-info {
   display: flex;
   align-items: baseline;
-  gap: v-bind('designTokens.spacing.sm');
-  flex-wrap: wrap;
+  gap: v-bind('designTokens.spacing.xs');
+  margin-bottom: v-bind('designTokens.spacing.sm');
 }
 
 .menu-price {
   font-family: v-bind('designTokens.typography.fontFamily.primary');
-  font-size: v-bind('designTokens.typography.fontSize.xl');
+  font-size: v-bind('designTokens.typography.fontSize.lg');
   font-weight: v-bind('designTokens.typography.fontWeight.medium');
   color: v-bind('designTokens.colors.accent.primary');
   letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
 }
 
-.menu-price-note {
-  font-size: v-bind('designTokens.typography.fontSize.xs');
-  color: v-bind('designTokens.colors.text.secondary');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
+.menu-separator {
+  color: v-bind('designTokens.colors.text.disabled');
+  font-size: v-bind('designTokens.typography.fontSize.sm');
 }
 
-.menu-card-body {
-  flex: 1;
-  padding: 0 v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.md');
-  overflow-y: auto;
-  max-height: 200px;
+.menu-duration {
+  font-size: v-bind('designTokens.typography.fontSize.sm');
+  color: v-bind('designTokens.colors.text.secondary');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
 }
 
 .menu-description {
-  font-size: v-bind('designTokens.typography.fontSize.sm');
-  color: v-bind('designTokens.colors.text.secondary');
-  line-height: v-bind('designTokens.typography.lineHeight.relaxed');
-  margin: 0 0 v-bind('designTokens.spacing.md') 0;
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
-}
-
-.menu-details {
-  border-top: 1px solid v-bind('designTokens.colors.border.light');
-  padding-top: v-bind('designTokens.spacing.md');
-}
-
-.menu-meta {
-  display: flex;
-  align-items: center;
-  gap: v-bind('designTokens.spacing.md');
-  margin-bottom: v-bind('designTokens.spacing.xs');
-  font-size: v-bind('designTokens.typography.fontSize.sm');
-}
-
-.meta-label {
-  color: v-bind('designTokens.colors.text.secondary');
-  font-weight: v-bind('designTokens.typography.fontWeight.medium');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
   font-size: v-bind('designTokens.typography.fontSize.xs');
-  min-width: 56px;
-}
-
-.meta-value {
-  color: v-bind('designTokens.colors.text.primary');
-  font-size: v-bind('designTokens.typography.fontSize.sm');
-}
-
-.menu-includes {
-  list-style: none;
-  padding: 0;
-  margin: v-bind('designTokens.spacing.sm') 0 0 0;
-}
-
-.menu-includes li {
-  position: relative;
-  padding-left: v-bind('designTokens.spacing.lg');
-  font-size: v-bind('designTokens.typography.fontSize.sm');
   color: v-bind('designTokens.colors.text.secondary');
-  line-height: v-bind('designTokens.typography.lineHeight.relaxed');
+  line-height: v-bind('designTokens.typography.lineHeight.normal');
+  margin: 0;
 }
 
-.menu-includes li::before {
-  content: '';
-  position: absolute;
-  left: v-bind('designTokens.spacing.xs');
-  top: 0.65em;
-  width: 6px;
-  height: 1px;
-  background-color: v-bind('designTokens.colors.accent.secondary');
-}
-
-.menu-card-footer {
-  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.xl');
-}
-
-.select-button {
-  width: 100%;
-  padding: v-bind('designTokens.spacing.md');
-  font-family: v-bind('designTokens.typography.fontFamily.primary');
-  font-size: v-bind('designTokens.typography.fontSize.sm');
-  font-weight: v-bind('designTokens.typography.fontWeight.medium');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
-  border: 1px solid v-bind('designTokens.colors.accent.primary');
-  border-radius: v-bind('designTokens.borderRadius.sm');
-  background-color: transparent;
+.detail-link {
+  display: inline-block;
+  margin-top: v-bind('designTokens.spacing.md');
+  font-size: v-bind('designTokens.typography.fontSize.xs');
   color: v-bind('designTokens.colors.accent.primary');
-  cursor: pointer;
-  transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.select-button:hover {
-  background-color: v-bind('designTokens.colors.accent.hover');
-}
-
-.select-button.is-selected {
-  background-color: v-bind('designTokens.colors.accent.primary');
+.selected-badge {
+  position: absolute;
+  top: v-bind('designTokens.spacing.sm');
+  right: v-bind('designTokens.spacing.sm');
+  font-size: v-bind('designTokens.typography.fontSize.xs');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
   color: v-bind('designTokens.colors.background.card');
-  border-color: v-bind('designTokens.colors.accent.primary');
+  background-color: v-bind('designTokens.colors.accent.primary');
+  padding: 2px v-bind('designTokens.spacing.sm');
+  border-radius: v-bind('designTokens.borderRadius.sm');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
 }
 
 @media (max-width: 768px) {
-  .menu-card-header {
-    padding: v-bind('designTokens.spacing.lg') v-bind('designTokens.spacing.lg') v-bind('designTokens.spacing.sm');
-  }
-
-  .menu-card-body {
-    padding: 0 v-bind('designTokens.spacing.lg') v-bind('designTokens.spacing.sm');
-    max-height: 180px;
-  }
-
-  .menu-card-footer {
-    padding: v-bind('designTokens.spacing.sm') v-bind('designTokens.spacing.lg') v-bind('designTokens.spacing.lg');
-  }
-
-  .menu-title {
-    font-size: v-bind('designTokens.typography.fontSize.base');
+  .menu-card {
+    padding: v-bind('designTokens.spacing.lg');
   }
 }
 </style>
