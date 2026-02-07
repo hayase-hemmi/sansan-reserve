@@ -37,6 +37,16 @@
             :rules="[rules.required, rules.email]"
           />
 
+          <BaseInput
+            ref="phoneInput"
+            v-model="formData.phone"
+            label="電話番号"
+            type="tel"
+            placeholder="090-1234-5678"
+            :required="true"
+            :rules="[rules.required, rules.phone]"
+          />
+
           <div class="menu-section">
             <label class="menu-label">撮影メニュー <span class="required">*</span></label>
             <div class="menu-grid">
@@ -120,6 +130,7 @@ interface FormData {
   lastName: string
   firstName: string
   email: string
+  phone: string
   menu: Menu | ''
   selectedSlot: string
 }
@@ -134,11 +145,13 @@ const dialogMessage = ref('')
 const lastNameInput = ref()
 const firstNameInput = ref()
 const emailInput = ref()
+const phoneInput = ref()
 
 const formData = reactive<FormData>({
   lastName: '',
   firstName: '',
   email: '',
+  phone: '',
   menu: '',
   selectedSlot: '',
 })
@@ -149,6 +162,10 @@ const rules = {
     const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return pattern.test(value) || '正しいメールアドレスを入力してください'
   },
+  phone: (value: string) => {
+    const pattern = /^[0-9\-]{10,14}$/
+    return pattern.test(value) || '正しい電話番号を入力してください'
+  },
 }
 
 const isFormValid = computed(() => {
@@ -156,9 +173,11 @@ const isFormValid = computed(() => {
     formData.lastName &&
     formData.firstName &&
     formData.email &&
+    formData.phone &&
     formData.menu &&
     formData.selectedSlot &&
-    rules.email(formData.email) === true
+    rules.email(formData.email) === true &&
+    rules.phone(formData.phone) === true
   )
 })
 
@@ -174,6 +193,7 @@ const handleSubmit = async () => {
       lastName: formData.lastName,
       firstName: formData.firstName,
       email: formData.email,
+      phone: formData.phone,
       menu: formData.menu as Menu,
       start: formData.selectedSlot,
     })
@@ -215,6 +235,7 @@ const handleReset = () => {
     lastName: '',
     firstName: '',
     email: '',
+    phone: '',
     menu: '',
     selectedSlot: '',
   })
@@ -223,6 +244,7 @@ const handleReset = () => {
   lastNameInput.value?.clearError()
   firstNameInput.value?.clearError()
   emailInput.value?.clearError()
+  phoneInput.value?.clearError()
 }
 </script>
 

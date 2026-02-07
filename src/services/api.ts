@@ -16,6 +16,7 @@ export interface ReserveRequest {
   lastName: string
   firstName: string
   email: string
+  phone: string
   menu: Menu
   start: string // ISO string
 }
