@@ -105,7 +105,7 @@ export function getMenuDuration(menu: Menu): number {
   const durations: Record<Menu, number> = {
     standard: 30,
     premium: 60,
-    family: 90,
+    family: 120,
     wedding: 120,
   }
   return durations[menu]
