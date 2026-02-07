@@ -20,15 +20,14 @@ import BasicInfoForm from '../components/BasicInfoForm.vue'
 import PhotoSlideshow from '../components/PhotoSlideshow.vue'
 import { designTokens } from '../styles/designTokens'
 
-// TODO: 本番では実際のスタジオ写真に差し替え
-// import slide1 from '../assets/img/slides/studio-1.jpg'
-// const slideImages = [slide1, slide2, ...]
-const slideImages: string[] = [
-  'https://images.unsplash.com/photo-1604537529428-15bcbeecfe4d?w=960&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=960&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=960&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1519741497674-611481863552?w=960&h=400&fit=crop',
-]
+import slide1 from '../assets/img/slides/_MG_0150.jpg'
+import slide2 from '../assets/img/slides/_MG_0325.jpg'
+import slide3 from '../assets/img/slides/_MG_2333.jpg'
+import slide4 from '../assets/img/slides/_MG_2358.jpg'
+import slide5 from '../assets/img/slides/_MG_4929.jpg'
+import slide6 from '../assets/img/slides/_MG_6280.jpg'
+
+const slideImages: string[] = [slide1, slide2, slide3, slide4, slide5, slide6]
 </script>
 
 <style scoped>

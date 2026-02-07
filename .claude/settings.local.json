@@ -4,7 +4,8 @@
       "WebFetch(domain:coubic.com)",
       "Bash(npx vue-tsc:*)",
       "Bash(npx vite build:*)",
-      "Bash(npx vitest run:*)"
+      "Bash(npx vitest run:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }
