@@ -46,20 +46,20 @@ const variantClass = computed(() => {
 .base-button {
   position: relative;
   font-family: v-bind('designTokens.typography.fontFamily.primary');
-  font-size: v-bind('designTokens.typography.fontSize.base');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
-  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.xl');
-  border-radius: v-bind('designTokens.borderRadius.md');
+  font-size: v-bind('designTokens.typography.fontSize.sm');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
+  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing["2xl"]');
+  border-radius: v-bind('designTokens.borderRadius.sm');
   border: none;
   cursor: pointer;
   transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
   text-transform: none;
   outline: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .variant-primary {
@@ -71,11 +71,9 @@ const variantClass = computed(() => {
 .variant-primary:hover:not(:disabled) {
   background-color: v-bind('designTokens.colors.accent.secondary');
   box-shadow: v-bind('designTokens.shadows.md');
-  transform: translateY(-1px);
 }
 
 .variant-primary:active:not(:disabled) {
-  transform: translateY(0);
   box-shadow: v-bind('designTokens.shadows.sm');
 }
 
@@ -83,6 +81,7 @@ const variantClass = computed(() => {
   background-color: transparent;
   color: v-bind('designTokens.colors.text.secondary');
   border: 1px solid v-bind('designTokens.colors.border.medium');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
 }
 
 .variant-outlined:hover:not(:disabled) {

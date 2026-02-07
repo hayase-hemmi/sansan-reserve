@@ -51,9 +51,9 @@ const isSelected = computed(() => props.selectedMenu === props.menu.value)
 .menu-card {
   position: relative;
   background-color: v-bind('designTokens.colors.background.card');
-  border: 2px solid v-bind('designTokens.colors.accent.secondary');
-  border-radius: v-bind('designTokens.borderRadius.lg');
-  padding: v-bind('designTokens.spacing.xl');
+  border: 1px solid v-bind('designTokens.colors.border.medium');
+  border-radius: v-bind('designTokens.borderRadius.sm');
+  padding: v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.lg');
   cursor: pointer;
   transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
   user-select: none;
@@ -62,19 +62,16 @@ const isSelected = computed(() => props.selectedMenu === props.menu.value)
 .menu-card:hover {
   border-color: v-bind('designTokens.colors.accent.primary');
   box-shadow: v-bind('designTokens.shadows.md');
-  transform: translateY(-2px);
 }
 
 .menu-card:focus {
   outline: none;
   border-color: v-bind('designTokens.colors.accent.primary');
-  box-shadow: 0 0 0 3px v-bind('designTokens.colors.accent.hover');
 }
 
 .menu-card.selected {
   border-color: v-bind('designTokens.colors.accent.primary');
   background-color: v-bind('designTokens.colors.accent.hover');
-  box-shadow: v-bind('designTokens.shadows.sm');
 }
 
 .menu-card-content {
@@ -91,20 +88,22 @@ const isSelected = computed(() => props.selectedMenu === props.menu.value)
 }
 
 .menu-title {
-  font-family: v-bind('designTokens.typography.fontFamily.heading');
+  font-family: v-bind('designTokens.typography.fontFamily.secondary');
   font-size: v-bind('designTokens.typography.fontSize.lg');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
   color: v-bind('designTokens.colors.text.primary');
   margin: 0;
-  line-height: v-bind('designTokens.typography.lineHeight.tight');
+  line-height: v-bind('designTokens.typography.lineHeight.base');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
 }
 
 .menu-price {
   font-family: v-bind('designTokens.typography.fontFamily.primary');
-  font-size: v-bind('designTokens.typography.fontSize.xl');
-  font-weight: v-bind('designTokens.typography.fontWeight.bold');
+  font-size: v-bind('designTokens.typography.fontSize.lg');
+  font-weight: v-bind('designTokens.typography.fontWeight.medium');
   color: v-bind('designTokens.colors.accent.primary');
   white-space: nowrap;
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
 }
 
 .menu-description {

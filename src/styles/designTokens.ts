@@ -75,11 +75,11 @@ export const designTokens = {
       loose: 1.875,      // h1用 (30px)
     },
     letterSpacing: {
-      tight: '-0.02em',
-      normal: '0',
-      wide: '0.02em',
-      wider: '0.05em',
-      widest: '2.45px',  // タイトル用（komori-ayaと同じ）
+      tight: '-0.01em',
+      normal: '0.01em',
+      wide: '0.04em',
+      wider: '0.08em',
+      widest: '0.14em',  // タイトル用
     },
   },
 
@@ -108,10 +108,10 @@ export const designTokens = {
   // Shadows
   shadows: {
     none: 'none',
-    sm: '0 1px 2px 0 rgba(66, 62, 62, 0.05)',
-    md: '0 4px 6px -1px rgba(66, 62, 62, 0.08), 0 2px 4px -1px rgba(66, 62, 62, 0.06)',
-    lg: '0 10px 15px -3px rgba(66, 62, 62, 0.08), 0 4px 6px -2px rgba(66, 62, 62, 0.05)',
-    xl: '0 20px 25px -5px rgba(66, 62, 62, 0.08), 0 10px 10px -5px rgba(66, 62, 62, 0.04)',
+    sm: '0 1px 3px 0 rgba(66, 62, 62, 0.04)',
+    md: '0 4px 12px -2px rgba(66, 62, 62, 0.06), 0 2px 4px -1px rgba(66, 62, 62, 0.04)',
+    lg: '0 8px 24px -4px rgba(66, 62, 62, 0.07), 0 4px 8px -2px rgba(66, 62, 62, 0.04)',
+    xl: '0 16px 32px -6px rgba(66, 62, 62, 0.08), 0 8px 16px -4px rgba(66, 62, 62, 0.03)',
   },
 
   // Transitions

@@ -226,13 +226,13 @@ const handleReset = () => {
 .form-card {
   background-color: v-bind('designTokens.colors.background.card');
   border: 1px solid v-bind('designTokens.colors.border.light');
-  border-radius: v-bind('designTokens.borderRadius.lg');
-  box-shadow: v-bind('designTokens.shadows.md');
+  border-radius: v-bind('designTokens.borderRadius.sm');
+  box-shadow: v-bind('designTokens.shadows.lg');
   overflow: hidden;
 }
 
 .card-body {
-  padding: v-bind('designTokens.spacing["2xl"]') v-bind('designTokens.spacing.xl');
+  padding: v-bind('designTokens.spacing["3xl"]') v-bind('designTokens.spacing["2xl"]');
 }
 
 .form-row {
@@ -252,11 +252,12 @@ const handleReset = () => {
 
 .menu-label {
   display: block;
-  font-size: v-bind('designTokens.typography.fontSize.sm');
+  font-size: v-bind('designTokens.typography.fontSize.xs');
   font-weight: v-bind('designTokens.typography.fontWeight.medium');
-  color: v-bind('designTokens.colors.text.primary');
+  color: v-bind('designTokens.colors.text.secondary');
   margin-bottom: v-bind('designTokens.spacing.md');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+  text-transform: uppercase;
 }
 
 .menu-label .required {
@@ -295,9 +296,9 @@ const handleReset = () => {
 
 .dialog-content {
   background-color: v-bind('designTokens.colors.background.card');
-  border-radius: v-bind('designTokens.borderRadius.lg');
+  border-radius: v-bind('designTokens.borderRadius.sm');
   box-shadow: v-bind('designTokens.shadows.xl');
-  max-width: 500px;
+  max-width: 480px;
   width: 100%;
   overflow: hidden;
 }
@@ -317,9 +318,10 @@ const handleReset = () => {
 
 .dialog-header h3 {
   margin: 0;
-  font-family: v-bind('designTokens.typography.fontFamily.heading');
+  font-family: v-bind('designTokens.typography.fontFamily.secondary');
   font-size: v-bind('designTokens.typography.fontSize.xl');
-  font-weight: v-bind('designTokens.typography.fontWeight.semibold');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
 }
 
 .dialog-body {
@@ -341,7 +343,15 @@ const handleReset = () => {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .card-body {
+    padding: v-bind('designTokens.spacing.xl') v-bind('designTokens.spacing.lg');
+  }
+
   .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-grid {
     grid-template-columns: 1fr;
   }
 

@@ -35,15 +35,15 @@ import { designTokens } from './styles/designTokens'
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: v-bind('designTokens.shadows.sm');
 }
 
 .header-content {
   max-width: v-bind('designTokens.layout.maxWidth.xl');
   margin: 0 auto;
-  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.xl');
+  padding: v-bind('designTokens.spacing.lg') v-bind('designTokens.spacing.xl');
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .logo-link {

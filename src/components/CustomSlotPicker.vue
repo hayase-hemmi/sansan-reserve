@@ -235,10 +235,11 @@ const formatTime = (isoString: string): string => {
 }
 
 .slot-instruction {
-  font-size: v-bind('designTokens.typography.fontSize.sm');
+  font-size: v-bind('designTokens.typography.fontSize.xs');
   color: v-bind('designTokens.colors.text.secondary');
   font-weight: v-bind('designTokens.typography.fontWeight.medium');
   margin-bottom: v-bind('designTokens.spacing.md');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
 }
 
 .slot-grid {
@@ -252,12 +253,12 @@ const formatTime = (isoString: string): string => {
   align-items: center;
   justify-content: center;
   gap: v-bind('designTokens.spacing.sm');
-  padding: v-bind('designTokens.spacing.md');
-  border-radius: v-bind('designTokens.borderRadius.md');
+  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.lg');
+  border-radius: v-bind('designTokens.borderRadius.sm');
   font-family: v-bind('designTokens.typography.fontFamily.primary');
   font-size: v-bind('designTokens.typography.fontSize.sm');
-  font-weight: v-bind('designTokens.typography.fontWeight.medium');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
   transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
   cursor: pointer;
   border: 1px solid;
@@ -272,8 +273,6 @@ const formatTime = (isoString: string): string => {
 
 .slot-chip.slot-available:hover {
   background-color: v-bind('designTokens.colors.accent.hover');
-  transform: translateY(-2px);
-  box-shadow: v-bind('designTokens.shadows.sm');
 }
 
 .slot-chip.slot-selected {

@@ -88,11 +88,12 @@ defineExpose({
 
 .input-label {
   font-family: v-bind('designTokens.typography.fontFamily.primary');
-  font-size: v-bind('designTokens.typography.fontSize.sm');
+  font-size: v-bind('designTokens.typography.fontSize.xs');
   font-weight: v-bind('designTokens.typography.fontWeight.medium');
-  color: v-bind('designTokens.colors.text.primary');
+  color: v-bind('designTokens.colors.text.secondary');
   margin-bottom: v-bind('designTokens.spacing.sm');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
+  text-transform: uppercase;
 }
 
 .required {
@@ -103,15 +104,16 @@ defineExpose({
 .input-field {
   font-family: v-bind('designTokens.typography.fontFamily.primary');
   font-size: v-bind('designTokens.typography.fontSize.base');
-  padding: v-bind('designTokens.spacing.md');
-  border: 2px solid v-bind('designTokens.colors.accent.secondary');
-  border-radius: v-bind('designTokens.borderRadius.md');
+  padding: v-bind('designTokens.spacing.md') v-bind('designTokens.spacing.lg');
+  border: 1px solid v-bind('designTokens.colors.border.medium');
+  border-radius: v-bind('designTokens.borderRadius.sm');
   background-color: v-bind('designTokens.colors.background.input');
   color: v-bind('designTokens.colors.text.primary');
   transition: all v-bind('designTokens.transitions.duration.normal') v-bind('designTokens.transitions.easing.easeInOut');
   outline: none;
   width: 100%;
   box-sizing: border-box;
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.normal');
 }
 
 .input-field:hover {
@@ -120,7 +122,6 @@ defineExpose({
 
 .input-field:focus {
   border-color: v-bind('designTokens.colors.accent.primary');
-  box-shadow: v-bind('designTokens.shadows.sm');
 }
 
 .input-field:disabled {

@@ -23,13 +23,13 @@ import { designTokens } from '../styles/designTokens'
 
 .page-header {
   text-align: center;
-  margin-bottom: v-bind('designTokens.spacing["2xl"]');
+  margin-bottom: v-bind('designTokens.spacing["3xl"]');
 }
 
 .page-header h1 {
-  font-family: v-bind('designTokens.typography.fontFamily.heading');
+  font-family: v-bind('designTokens.typography.fontFamily.secondary');
   font-size: v-bind('designTokens.typography.fontSize["3xl"]');
-  font-weight: v-bind('designTokens.typography.fontWeight.bold');
+  font-weight: v-bind('designTokens.typography.fontWeight.regular');
   color: v-bind('designTokens.colors.text.primary');
   line-height: v-bind('designTokens.typography.lineHeight.loose');
   letter-spacing: v-bind('designTokens.typography.letterSpacing.widest');
@@ -38,10 +38,10 @@ import { designTokens } from '../styles/designTokens'
 
 .page-header p {
   font-family: v-bind('designTokens.typography.fontFamily.primary');
-  font-size: v-bind('designTokens.typography.fontSize.base');
+  font-size: v-bind('designTokens.typography.fontSize.sm');
   color: v-bind('designTokens.colors.text.secondary');
-  line-height: v-bind('designTokens.typography.lineHeight.normal');
-  letter-spacing: v-bind('designTokens.typography.letterSpacing.wide');
+  line-height: v-bind('designTokens.typography.lineHeight.relaxed');
+  letter-spacing: v-bind('designTokens.typography.letterSpacing.wider');
   margin: 0;
 }
 
