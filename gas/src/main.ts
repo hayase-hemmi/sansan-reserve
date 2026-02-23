@@ -7,6 +7,7 @@ import {
 } from './util'
 import { validateToken } from './auth'
 import { generateTimeSlots, createReservationEvent } from './calendar'
+import { sendConfirmationEmail } from './mail'
 import {
   AvailabilityRequest,
   AvailabilityResponse,
@@ -175,6 +176,22 @@ function handleReserve(
       body.menu,
       start
     )
+
+    // Send confirmation email (non-blocking: don't fail the reservation if email fails)
+    try {
+      sendConfirmationEmail({
+        lastName: body.lastName,
+        firstName: body.firstName,
+        email: body.email,
+        phone: body.phone || '',
+        guestCount: body.guestCount || 1,
+        hasPet: body.hasPet || false,
+        menu: body.menu,
+        start,
+      })
+    } catch (mailError) {
+      logError('sendConfirmationEmail', mailError)
+    }
 
     const response: ReserveResponse = {
       ok: true,

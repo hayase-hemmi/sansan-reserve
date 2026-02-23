@@ -265,6 +265,79 @@ function createReservationEvent(
 }
 
 // ============================================================================
+// Email
+// ============================================================================
+
+function sendConfirmationEmail(
+  lastName: string,
+  firstName: string,
+  email: string,
+  phone: string,
+  guestCount: number,
+  hasPet: boolean,
+  menu: Menu,
+  start: Date
+): void {
+  const menuConfig = MENU_CONFIG[menu]
+  const end = new Date(start.getTime() + menuConfig.duration * 60 * 1000)
+
+  const dateStr = formatDateJST(start)
+  const startTimeStr = formatTimeJST(start)
+  const endTimeStr = formatTimeJST(end)
+
+  const subject = `【Sansan Reserve】ご予約確認 - ${dateStr} ${startTimeStr}`
+
+  const body = `${lastName} ${firstName} 様
+
+この度はご予約いただき、誠にありがとうございます。
+以下の内容でご予約を承りました。
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+  ご予約内容
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+■ お名前: ${lastName} ${firstName} 様
+■ メールアドレス: ${email}
+■ 電話番号: ${phone}
+■ ご来店人数: ${guestCount}人
+■ ペット同伴: ${hasPet ? 'あり' : 'なし'}
+■ 撮影メニュー: ${menuConfig.displayName}
+■ 所要時間: 約${menuConfig.duration}分
+■ 予約日時: ${dateStr} ${startTimeStr}〜${endTimeStr}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+ご不明な点がございましたら、お気軽にお問い合わせください。
+
+当日のご来店をお待ちしております。
+
+──────────────────────
+Sansan Reserve 写真スタジオ
+──────────────────────`
+
+  MailApp.sendEmail({
+    to: email,
+    subject,
+    body,
+  })
+}
+
+function formatDateJST(date: Date): string {
+  const dayNames = ['日', '月', '火', '水', '木', '金', '土']
+  const y = date.getFullYear()
+  const m = date.getMonth() + 1
+  const d = date.getDate()
+  const dow = dayNames[date.getDay()]
+  return `${y}年${m}月${d}日（${dow}）`
+}
+
+function formatTimeJST(date: Date): string {
+  const h = String(date.getHours()).padStart(2, '0')
+  const min = String(date.getMinutes()).padStart(2, '0')
+  return `${h}:${min}`
+}
+
+// ============================================================================
 // Main Handlers
 // ============================================================================
 
@@ -387,6 +460,22 @@ function handleReserve(
       body.menu,
       start
     )
+
+    // Send confirmation email (non-blocking)
+    try {
+      sendConfirmationEmail(
+        body.lastName,
+        body.firstName,
+        body.email,
+        body.phone || '',
+        body.guestCount || 1,
+        body.hasPet || false,
+        body.menu,
+        start
+      )
+    } catch (mailError) {
+      logError('sendConfirmationEmail', mailError)
+    }
 
     const response: ReserveResponse = {
       ok: true,

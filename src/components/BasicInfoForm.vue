@@ -346,7 +346,7 @@ const handleSubmit = async () => {
 
     if (response.ok) {
       dialogType.value = 'success'
-      dialogMessage.value = 'ご予約ありがとうございます！確認メールをお送りいたしました。'
+      dialogMessage.value = 'ご予約ありがとうございます！\n確認メールをお送りいたしました。'
       showDialog.value = true
 
       setTimeout(() => {
@@ -525,6 +525,7 @@ const handleReset = () => {
 .dialog-body p {
   margin: 0;
   font-size: v-bind('designTokens.typography.fontSize.base');
+  white-space: pre-line;
 }
 
 .dialog-actions {
