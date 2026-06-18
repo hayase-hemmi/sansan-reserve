@@ -99,13 +99,13 @@ function initParticles(mode: ThemeMode) {
         particles.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          size: [2, 1.5, 1][layer],
-          speed: [8, 12, 16][layer] + Math.random() * 2,
-          opacity: [0.3, 0.2, 0.12][layer],
+          size: [2, 1.5, 1][layer]!,
+          speed: [8, 12, 16][layer]! + Math.random() * 2,
+          opacity: [0.3, 0.2, 0.12][layer]!,
           phase: Math.random() * Math.PI * 2,
           phaseSpeed: 0, drift: -1.5,
           layer,
-          length: [18, 14, 10][layer],
+          length: [18, 14, 10][layer]!,
           splashTimer: 0,
         })
       }
@@ -118,9 +118,9 @@ function initParticles(mode: ThemeMode) {
         particles.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          size: [4, 2.5, 1.5][layer] + Math.random() * [2, 1.2, 0.8][layer],
-          speed: [0.5, 0.9, 1.4][layer] + Math.random() * 0.3,
-          opacity: [0.7, 0.45, 0.25][layer],
+          size: [4, 2.5, 1.5][layer]! + Math.random() * [2, 1.2, 0.8][layer]!,
+          speed: [0.5, 0.9, 1.4][layer]! + Math.random() * 0.3,
+          opacity: [0.7, 0.45, 0.25][layer]!,
           phase: Math.random() * Math.PI * 2,
           phaseSpeed: Math.random() * 0.02 + 0.005,
           drift: (Math.random() - 0.5) * 0.3,

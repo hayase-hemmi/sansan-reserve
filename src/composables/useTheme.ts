@@ -47,7 +47,7 @@ export function useTheme() {
   const nextTheme = () => {
     const idx = themes.findIndex(t => t.id === currentTheme.value)
     const next = themes[(idx + 1) % themes.length]
-    setTheme(next.id)
+    if (next) setTheme(next.id)
   }
 
   return {
