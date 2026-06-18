@@ -116,6 +116,7 @@ const handleSelect = () => {
 
 <style>
 /* Global styles - no scoped, no v-bind() to avoid Teleport issues */
+/* Uses CSS custom properties for theme support */
 .mdm-overlay {
   position: fixed;
   top: 0;
@@ -132,15 +133,16 @@ const handleSelect = () => {
 
 .mdm-sheet {
   position: relative;
-  background-color: #ffffff;
+  background-color: var(--bg-card);
   border-radius: 0.75rem 0.75rem 0 0;
   width: 100%;
   max-width: 480px;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 -4px 24px rgba(66, 62, 62, 0.12);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
   animation: mdmSlideUp 0.3s cubic-bezier(0.0, 0, 0.2, 1);
+  transition: background-color 0.4s;
 }
 
 .mdm-close {
@@ -154,14 +156,14 @@ const handleSelect = () => {
   justify-content: center;
   background: none;
   border: none;
-  color: #5a6c7d;
+  color: var(--text-secondary);
   cursor: pointer;
   border-radius: 9999px;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.4s;
 }
 
 .mdm-close:hover {
-  background-color: #e1f4fb;
+  background-color: var(--bg-hover);
 }
 
 .mdm-header {
@@ -172,11 +174,12 @@ const handleSelect = () => {
   font-family: "Shippori Antique", "Shippori Antique B1", serif;
   font-size: 1.25rem;
   font-weight: 400;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
   line-height: 1.4;
   letter-spacing: 0.04em;
   padding-right: 2rem;
+  transition: color 0.4s;
 }
 
 .mdm-price-block {
@@ -190,14 +193,16 @@ const handleSelect = () => {
   font-family: "Lato", "Inter", "Zen Kaku Gothic Antique", sans-serif;
   font-size: 1.5rem;
   font-weight: 500;
-  color: #52372d;
+  color: var(--accent-primary);
   letter-spacing: 0.04em;
+  transition: color 0.4s;
 }
 
 .mdm-price-note {
   font-size: 0.75rem;
-  color: #5a6c7d;
+  color: var(--text-secondary);
   letter-spacing: 0.01em;
+  transition: color 0.4s;
 }
 
 .mdm-body {
@@ -208,16 +213,18 @@ const handleSelect = () => {
 
 .mdm-description {
   font-size: 0.875rem;
-  color: #5a6c7d;
+  color: var(--text-secondary);
   line-height: 1.75;
   margin: 0 0 1.5rem 0;
   letter-spacing: 0.01em;
+  transition: color 0.4s;
 }
 
 .mdm-meta-list {
-  border-top: 1px solid #d9e8f2;
+  border-top: 1px solid var(--border-light);
   padding-top: 1.5rem;
   margin-bottom: 1.5rem;
+  transition: border-color 0.4s;
 }
 
 .mdm-meta {
@@ -228,22 +235,25 @@ const handleSelect = () => {
 }
 
 .mdm-meta-label {
-  color: #5a6c7d;
+  color: var(--text-secondary);
   font-weight: 500;
   letter-spacing: 0.08em;
   font-size: 0.75rem;
   min-width: 56px;
+  transition: color 0.4s;
 }
 
 .mdm-meta-value {
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 0.875rem;
+  transition: color 0.4s;
 }
 
 /* ── Sections ── */
 .mdm-sections {
-  border-top: 1px solid #d9e8f2;
+  border-top: 1px solid var(--border-light);
   padding-top: 1.5rem;
+  transition: border-color 0.4s;
 }
 
 .mdm-section {
@@ -258,11 +268,12 @@ const handleSelect = () => {
   font-family: "Shippori Antique", "Shippori Antique B1", serif;
   font-size: 0.8125rem;
   font-weight: 400;
-  color: #52372d;
+  color: var(--accent-primary);
   letter-spacing: 0.08em;
   margin: 0 0 0.625rem 0;
   padding-bottom: 0.375rem;
-  border-bottom: 1px solid #d9cdc5;
+  border-bottom: 1px solid var(--accent-hover);
+  transition: color 0.4s, border-color 0.4s;
 }
 
 .mdm-section-content {
@@ -272,9 +283,10 @@ const handleSelect = () => {
 /* Text (plain paragraph) */
 .mdm-item-text {
   font-size: 0.8125rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   line-height: 1.75;
   margin: 0 0 0.25rem 0;
+  transition: color 0.4s;
 }
 
 /* Bullet items */
@@ -282,43 +294,48 @@ const handleSelect = () => {
   position: relative;
   padding-left: 1.25rem;
   font-size: 0.8125rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   line-height: 1.75;
   margin-bottom: 0.375rem;
+  transition: color 0.4s;
 }
 
 .mdm-item-bullet::before {
   content: '\30FB';
   position: absolute;
   left: 0;
-  color: #a68a7b;
+  color: var(--accent-secondary);
+  transition: color 0.4s;
 }
 
 /* Note items */
 .mdm-item-note {
   font-size: 0.75rem;
-  color: #5a6c7d;
+  color: var(--text-secondary);
   line-height: 1.75;
   margin: 0.25rem 0 0.5rem 0;
   padding: 0.5rem 0.75rem;
-  background-color: #f5f0ec;
-  border-left: 2px solid #a68a7b;
+  background-color: var(--note-bg);
+  border-left: 2px solid var(--accent-secondary);
   border-radius: 0 0.25rem 0.25rem 0;
+  transition: color 0.4s, background-color 0.4s, border-color 0.4s;
 }
 
 .mdm-note-mark {
-  color: #a68a7b;
+  color: var(--accent-secondary);
   font-weight: 500;
   margin-right: 0.25rem;
+  transition: color 0.4s;
 }
 
 /* Sub-items (indented detail lines) */
 .mdm-item-sub {
   padding-left: 1rem;
   font-size: 0.75rem;
-  color: #5a6c7d;
+  color: var(--text-secondary);
   line-height: 1.75;
   margin-bottom: 0.125rem;
+  transition: color 0.4s;
 }
 
 /* Example items */
@@ -337,16 +354,19 @@ const handleSelect = () => {
 }
 
 .mdm-example-ok {
-  color: #6ba572;
+  color: var(--status-success);
+  transition: color 0.4s;
 }
 
 .mdm-example-ng {
-  color: #c87c7c;
+  color: var(--status-error);
+  transition: color 0.4s;
 }
 
 .mdm-footer {
   padding: 1.5rem 2rem 2rem;
-  border-top: 1px solid #d9e8f2;
+  border-top: 1px solid var(--border-light);
+  transition: border-color 0.4s;
 }
 
 .mdm-select-btn {
@@ -356,23 +376,23 @@ const handleSelect = () => {
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.08em;
-  border: 1px solid #52372d;
+  border: 1px solid var(--accent-primary);
   border-radius: 0.25rem;
-  background-color: #52372d;
-  color: #ffffff;
+  background-color: var(--accent-primary);
+  color: var(--bg-card);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mdm-select-btn:hover {
-  background-color: #a68a7b;
-  border-color: #a68a7b;
+  background-color: var(--accent-secondary);
+  border-color: var(--accent-secondary);
 }
 
 .mdm-select-btn.is-selected {
   background-color: transparent;
-  color: #52372d;
-  border-color: #52372d;
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 
 @keyframes mdmFadeIn {

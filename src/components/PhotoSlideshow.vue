@@ -53,6 +53,8 @@ onUnmounted(() => {
   width: 100%;
   overflow: hidden;
   border-radius: 0;
+  z-index: 52;
+  isolation: isolate;
 }
 
 .slideshow-images {
@@ -78,7 +80,8 @@ onUnmounted(() => {
 .slideshow-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(255, 255, 255, 0.72);
+  background-color: var(--overlay-bg);
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slideshow-content {

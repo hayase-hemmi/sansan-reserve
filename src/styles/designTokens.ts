@@ -5,35 +5,34 @@
  */
 
 export const designTokens = {
-  // Color Palette
+  // Color Palette - uses CSS custom properties for theming
   colors: {
-    // Primary colors - light blue tones
     background: {
-      main: '#c3eaf7',      // Light blue background (195, 234, 247)
-      card: '#ffffff',      // White card background
-      hover: '#e1f4fb',     // Even lighter blue for hover states
-      input: '#ffffff',     // Input field background
+      main: 'var(--bg-main)',
+      card: 'var(--bg-card)',
+      hover: 'var(--bg-hover)',
+      input: 'var(--bg-input)',
     },
     text: {
-      primary: '#2c3e50',   // Deep blue-gray for main text
-      secondary: '#5a6c7d', // Medium blue-gray for secondary text
-      disabled: '#95a5b3',  // Light blue-gray for disabled text
+      primary: 'var(--text-primary)',
+      secondary: 'var(--text-secondary)',
+      disabled: 'var(--text-disabled)',
     },
     accent: {
-      primary: '#52372d',   // Brown (accent color) (82, 55, 45)
-      secondary: '#a68a7b', // Light brown (secondary accent)
-      hover: '#d9cdc5',     // Very light brown for tag hover
+      primary: 'var(--accent-primary)',
+      secondary: 'var(--accent-secondary)',
+      hover: 'var(--accent-hover)',
     },
     border: {
-      light: '#d9e8f2',     // Light blue border
-      medium: '#b8d0e0',    // Medium blue border
-      focus: '#52372d',     // Focus state border (brown accent)
+      light: 'var(--border-light)',
+      medium: 'var(--border-medium)',
+      focus: 'var(--border-focus)',
     },
     status: {
-      success: '#6ba572',   // Muted green
-      error: '#c87c7c',     // Muted red
-      warning: '#d4a574',   // Muted orange
-      info: '#5a9ab8',      // Blue for info (matching accent)
+      success: 'var(--status-success)',
+      error: 'var(--status-error)',
+      warning: 'var(--status-warning)',
+      info: 'var(--status-info)',
     },
   },
 
@@ -105,13 +104,13 @@ export const designTokens = {
     full: '9999px',
   },
 
-  // Shadows
+  // Shadows - uses --shadow-alpha CSS variable for theme adaptation
   shadows: {
     none: 'none',
-    sm: '0 1px 3px 0 rgba(66, 62, 62, 0.04)',
-    md: '0 4px 12px -2px rgba(66, 62, 62, 0.06), 0 2px 4px -1px rgba(66, 62, 62, 0.04)',
-    lg: '0 8px 24px -4px rgba(66, 62, 62, 0.07), 0 4px 8px -2px rgba(66, 62, 62, 0.04)',
-    xl: '0 16px 32px -6px rgba(66, 62, 62, 0.08), 0 8px 16px -4px rgba(66, 62, 62, 0.03)',
+    sm: '0 1px 3px 0 rgba(0, 0, 0, var(--shadow-alpha, 0.04))',
+    md: '0 4px 12px -2px rgba(0, 0, 0, calc(var(--shadow-alpha, 0.04) * 1.5)), 0 2px 4px -1px rgba(0, 0, 0, var(--shadow-alpha, 0.04))',
+    lg: '0 8px 24px -4px rgba(0, 0, 0, calc(var(--shadow-alpha, 0.04) * 1.75)), 0 4px 8px -2px rgba(0, 0, 0, var(--shadow-alpha, 0.04))',
+    xl: '0 16px 32px -6px rgba(0, 0, 0, calc(var(--shadow-alpha, 0.04) * 2)), 0 8px 16px -4px rgba(0, 0, 0, calc(var(--shadow-alpha, 0.04) * 0.75))',
   },
 
   // Transitions

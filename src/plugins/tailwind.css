@@ -1,9 +1,61 @@
 @import "tailwindcss";
 
 /* Google Fonts - komori-aya.com inspired font stack */
-/* 日本語フォント: Zen Kaku Gothic Antique, Shippori Antique */
-/* 英語フォント: Lato, Inter */
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@300;400;500;700;900&family=Shippori+Antique:wght@400&family=Shippori+Antique+B1:wght@400&family=Lato:wght@300;400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── CSS Houdini @property ── */
+@property --bg-main     { syntax: '<color>'; inherits: true; initial-value: #f2efe9; }
+@property --bg-card     { syntax: '<color>'; inherits: true; initial-value: #faf8f5; }
+@property --bg-hover    { syntax: '<color>'; inherits: true; initial-value: #eae7e1; }
+@property --bg-input    { syntax: '<color>'; inherits: true; initial-value: #faf8f5; }
+@property --text-primary   { syntax: '<color>'; inherits: true; initial-value: #1a1a1a; }
+@property --text-secondary { syntax: '<color>'; inherits: true; initial-value: #686868; }
+@property --text-disabled  { syntax: '<color>'; inherits: true; initial-value: #a0a0a0; }
+@property --accent-primary   { syntax: '<color>'; inherits: true; initial-value: #8b7355; }
+@property --accent-secondary { syntax: '<color>'; inherits: true; initial-value: #a6936f; }
+@property --accent-hover     { syntax: '<color>'; inherits: true; initial-value: #e8e0d4; }
+@property --border-light  { syntax: '<color>'; inherits: true; initial-value: #d8d5cf; }
+@property --border-medium { syntax: '<color>'; inherits: true; initial-value: #c0bdb6; }
+@property --border-focus  { syntax: '<color>'; inherits: true; initial-value: #8b7355; }
+@property --status-success { syntax: '<color>'; inherits: true; initial-value: #3a7a44; }
+@property --status-error   { syntax: '<color>'; inherits: true; initial-value: #b84040; }
+@property --status-warning { syntax: '<color>'; inherits: true; initial-value: #a07020; }
+@property --status-info    { syntax: '<color>'; inherits: true; initial-value: #2a7aaa; }
+@property --note-bg        { syntax: '<color>'; inherits: true; initial-value: #e4dfd5; }
+@property --dl-glow   { syntax: '<color>'; inherits: true; initial-value: #e8d8b8; }
+@property --dl-shadow  { syntax: '<color>'; inherits: true; initial-value: #1a1917; }
+
+/* ── Theme CSS Custom Properties ── */
+
+/* Day (default) - warm cream, reference "Day" */
+:root {
+  --bg-main: #f2efe9;
+  --bg-card: #faf8f5;
+  --bg-hover: #eae7e1;
+  --bg-input: #faf8f5;
+  --text-primary: #1a1a1a;
+  --text-secondary: #686868;
+  --text-disabled: #a0a0a0;
+  --accent-primary: #8b7355;
+  --accent-secondary: #a6936f;
+  --accent-hover: #e8e0d4;
+  --border-light: #d8d5cf;
+  --border-medium: #c0bdb6;
+  --border-focus: #8b7355;
+  --status-success: #3a7a44;
+  --status-error: #b84040;
+  --status-warning: #a07020;
+  --status-info: #2a7aaa;
+  --shadow-alpha: 0.04;
+  --overlay-bg: rgba(242, 239, 233, 0.75);
+  --note-bg: #eae5dd;
+
+  --dl-glow: #e8d8b8;
+  --dl-shadow: #1a1917;
+  --dl-opacity: 0.5;
+  --dl-shutter-h: 12px;
+  --dl-shutter-gap: 50px;
+}
 
 /* Base styles */
 * {

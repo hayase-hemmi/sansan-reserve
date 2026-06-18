@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { designTokens } from './styles/designTokens'
+import DappledLight from './components/DappledLight.vue'
 </script>
 
 <template>
   <div class="app-wrapper">
+    <DappledLight />
     <header class="app-header">
       <div class="header-content">
         <router-link to="/" class="logo-link">

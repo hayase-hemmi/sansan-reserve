@@ -5,7 +5,30 @@
       "Bash(npx vue-tsc:*)",
       "Bash(npx vite build:*)",
       "Bash(npx vitest run:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "WebFetch(domain:theme-switch.pages.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git checkout:*)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl -I https://theme-switch.pages.dev/assets/leaves.mp4)",
+      "Bash(curl -L https://theme-switch.pages.dev/assets/leaves.mp4 -o /Users/hemmihayase/Documents/projects/sansan-reserve/src/assets/img/leaves.mp4)",
+      "Bash(curl -s https://theme-switch.pages.dev/)",
+      "WebFetch(domain:pixabay.com)",
+      "WebSearch",
+      "WebFetch(domain:www.videezy.com)",
+      "WebFetch(domain:mixkit.co)",
+      "WebFetch(domain:www.vecteezy.com)",
+      "Bash(curl -sI https://assets.mixkit.co/videos/15335/15335-720.mp4)",
+      "Bash(curl -sI \"https://static.vecteezy.com/system/resources/previews/002/018/506/mp4/swaying-leaves-shadow-on-white-background.mp4\")",
+      "Bash(curl -sI \"https://static.vecteezy.com/system/resources/previews/002/018/506/original/swaying-leaves-shadow-on-white-background.mp4\")",
+      "Bash(curl -sI \"https://static.vecteezy.com/system/resources/previews/002/018/506/mp4_480/swaying-leaves-shadow-on-white-background.mp4\")",
+      "WebFetch(domain:www.pexels.com)",
+      "Bash(curl -sI \"https://videos.pexels.com/video-files/4238473/4238473-hd_1280_720_60fps.mp4\")",
+      "Bash(curl -sI \"https://videos.pexels.com/video-files/26508527/11955051_1280_720_25fps.mp4\")",
+      "Bash(curl -L https://videos.pexels.com/video-files/26508527/11955051_1280_720_25fps.mp4 -o /Users/hemmihayase/Documents/projects/sansan-reserve/src/assets/img/leaves.mp4)",
+      "WebFetch(domain:css-tricks.com)",
+      "WebFetch(domain:www.allaboutken.com)"
     ]
   }
 }
